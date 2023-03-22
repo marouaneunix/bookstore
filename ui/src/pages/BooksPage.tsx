@@ -5,6 +5,10 @@ import {Link} from "react-router-dom";
 type Book = {
     id: number;
     name: string;
+    isbn: string;
+    author: string;
+    category: string;
+    description: string
 }
 export const BooksPage = () => {
 
@@ -13,7 +17,7 @@ export const BooksPage = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await axios("/api/v1/books")
+            const response = await axios("/api/books")
             console.log(response.data);
             setBooks(response.data)
         }
@@ -22,7 +26,6 @@ export const BooksPage = () => {
 
     return (
         <>
-
             <nav className="flex pt-5 pb-10" aria-label="Breadcrumb">
                 <ol className="inline-flex items-center space-x-1 md:space-x-3">
                     <li className="inline-flex items-center">
@@ -52,8 +55,9 @@ export const BooksPage = () => {
             </nav>
 
             {
-                books.map(book => <h3>{book.name}</h3>)
+                books.map(book => <h3>{book.id}{" "}{ book.name}{" "}{ book.isbn}{" "}{ book.author}{" "}{ book.category}{" "}{ book.description}</h3> )
             }
+
         </>
     )
 }
