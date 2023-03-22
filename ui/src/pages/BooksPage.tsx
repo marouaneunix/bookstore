@@ -4,21 +4,44 @@ import {Link} from "react-router-dom";
 
 type Book = {
     id: number;
-    name: string;
+    title: string;
+    author: string;
+    year: string;
+    isbn: string;
+    descreption: string;
+    category: string;
 }
 export const BooksPage = () => {
 
     const [books, setBooks] = useState<Array<Book>>([]);
+    const [descreption,setDescreption]=useState("")
 
 
     useEffect(() => {
-        const fetchBooks = async () => {
-            const response = await axios("/api/v1/books")
-            console.log(response.data);
-            setBooks(response.data)
-        }
+
         fetchBooks();
     },[])
+
+    const fetchBooks = async () => {
+        const response = await axios.get("/books/")
+        console.log(response.data);
+        setBooks(response.data)
+    }
+    const handleDeleteBook = async(id:any)=>{
+            await axios.delete(`/books/${id}`)
+        fetchBooks();
+    }
+
+    let desc
+    let descre
+    const handleRowClick = (id:any)=>{
+
+        console.log("hhk")
+        desc=books[id].descreption
+        setDescreption(desc)
+        descre=<tr>{desc}</tr>
+
+    }
 
     return (
         <>
@@ -51,9 +74,68 @@ export const BooksPage = () => {
                 </ol>
             </nav>
 
-            {
-                books.map(book => <h3>{book.name}</h3>)
-            }
+
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className="px-6 py-3">
+                            #
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Book name
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Author
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Category
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            year
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                            Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                        {books.map((book)=>{
+                            return(
+                                <tr key={book.id} onClick={()=>handleRowClick(book.id)} className="bg-white border-b dark:bg-gray-900 dark:border-gray-700 shadow">
+                                    <th scope="row"
+                                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {book.id}
+                                    </th>
+                                    <th scope="row"
+                                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {book.title}
+                                    </th>
+                                    <td className="px-6 py-4">
+                                        {book.author}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {book.category}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {book.year}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <a href="#" onClick={()=>handleDeleteBook(book.id)}
+                                           className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Remove</a>
+                                    </td>
+                                </tr>
+
+                            )
+                        })
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
         </>
     )
 }
