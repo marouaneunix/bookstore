@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import PageHero from "../layout/PageHero";
 import {useFormik} from "formik";
 import * as Yup from "yup";
@@ -8,6 +8,24 @@ import swal from "sweetalert";
 
 
 export const CreateBookPage = () => {
+
+    const [booksISBN, setBooksISBN] = useState([]);
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            const response = await axios("/api/v1/books");
+            const books = response.data;
+            const fetchedBooksISBN = [];
+            books.map((book) => {
+                fetchedBooksISBN.push(book.isbn);
+            });
+            console.log('fetchedBooksISBN => ', fetchedBooksISBN);
+            setBooksISBN(fetchedBooksISBN);
+        };
+
+        fetchBooks();
+    }, []);
+
 
     const initialValues = {
         name: "",
@@ -22,7 +40,9 @@ export const CreateBookPage = () => {
         validationSchema: Yup.object({
             name: Yup.string().required("Required"),
             author: Yup.string().required("Required"),
-            isbn: Yup.string().required("Required"),
+            isbn: Yup.string().test('is-unique', 'This ISBN value already exists.', (value) => {
+                return value === undefined || booksISBN.indexOf(value) === -1;
+            }).required("Required"),
             category: Yup.string().required("Required"),
             description: Yup.string().min(100).required("Required")
         }),
@@ -146,9 +166,9 @@ export const CreateBookPage = () => {
                                     <option>Classics</option>
                                     <option>Crime</option>
                                     <option>Fantasy</option>
-                                    <option>Humour and satire</option>
+                                    <option>Humour</option>
                                     <option>Horror</option>
-                                    <option>Science fiction</option>
+                                    <option>Fiction</option>
                                     <option>Mystery</option>
                                     <option>Poetry</option>
                                     <option>Romance</option>
@@ -172,7 +192,7 @@ export const CreateBookPage = () => {
                                     onBlur={formik.handleBlur}
                                     value={formik.values.description}
                                     className="form-textarea w-full h-52 bg-gray-100 rounded-md"
-                                    placeholder="Product description"
+                                    placeholder="Book description"
                                 ></textarea>
                                 {formik.touched.description && formik.errors.description && (
                                     <p className="text-xs font-semibold text-red-500">

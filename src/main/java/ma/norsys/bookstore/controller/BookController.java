@@ -21,6 +21,14 @@ public class BookController {
         return bookService.getBooks();
     }
 
+    @PostMapping("/list")
+    public List<Book> getBooksByNameAndCategory(
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "category", required = false) String category
+    ) {
+        return bookService.findByNameAndCategory(name, category);
+    }
+
     @GetMapping("/{bookId}")
     public Optional<Book> getBook(@PathVariable int bookId) {
         return bookService.findById(bookId);

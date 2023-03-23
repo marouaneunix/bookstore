@@ -47,7 +47,8 @@ export const  Layout = () => {
             {/* An <Outlet> renders whatever child route is currently active,
           so you can think about this <Outlet> as a placeholder for
           the child routes we defined above. */}
-            <div className="md:container md:mx-auto">
+            {/*<div className="md:container md:mx-auto">*/}
+            <div className="w-[80%] mx-auto">
                 <Outlet />
             </div>
 

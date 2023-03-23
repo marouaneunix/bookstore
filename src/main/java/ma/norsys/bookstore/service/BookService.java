@@ -23,6 +23,10 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    public List<Book> findByNameAndCategory(String name, String category) {
+        return bookRepository.findByNameContainingAndCategoryContaining(name, category);
+    }
+
     public Optional<Book> findById(int bookId) {
         return bookRepository.findById(bookId);
     }
