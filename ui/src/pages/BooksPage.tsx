@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import PageHero from "../layout/PageHero";
+import BooksList from "../components/BooksList";
 
 type Book = {
     id: number;
     name: string;
+    author: string;
+    isbn: string;
+    category: string;
+    description: string;
 }
+
 export const BooksPage = () => {
 
     const [books, setBooks] = useState<Array<Book>>([]);
@@ -23,10 +29,7 @@ export const BooksPage = () => {
     return (
         <>
             <PageHero title="Books"/>
-
-            {
-                books.map(book => <h3>{book.name}</h3>)
-            }
+            <BooksList books={books} />
         </>
     )
 }
