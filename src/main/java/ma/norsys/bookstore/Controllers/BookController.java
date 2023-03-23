@@ -48,9 +48,9 @@ public class BookController {
 
 
     @PostMapping()
-    public void addBook( @RequestBody Book book){
+    public Book addBook( @RequestBody Book book){
 
-        bookService.saveBook(book);
+         return bookService.saveBook(book);
     }
 
 }

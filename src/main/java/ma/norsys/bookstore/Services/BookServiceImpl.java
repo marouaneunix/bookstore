@@ -49,14 +49,16 @@ public class BookServiceImpl implements BookServiceInterface{
 
        for(int i=0;i< categoriesSearchSplit.length;i++){
            for(int j=0; j<allBook.size();j++){
-
+                  //  if(allBook.get(j).getCategory().contains(categoriesSearchSplit[i])){
+                    //    bookFound.add(allBook.get(j));
+                   // }
                String[] bookCategorySplit=allBook.get(j).getCategory().split(" ");
 
 
                for(int k=0;k<bookCategorySplit.length;k++){
 
 
-                   if(bookCategorySplit[k].compareTo(categoriesSearchSplit[i])==0){
+                   if(bookCategorySplit[k].contains(categoriesSearchSplit[i])){
 
 
 
