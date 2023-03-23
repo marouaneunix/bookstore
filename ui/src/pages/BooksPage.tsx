@@ -1,59 +1,107 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import Breadcrumb from "../components/Breadcrumb";
 
-type Book = {
+type Category = {
     id: number;
     name: string;
 }
+
+type Book = {
+    id: number;
+    title: string;
+    isbn: string;
+    author: string;
+    categories: Category[];
+}
+
+
 export const BooksPage = () => {
 
     const [books, setBooks] = useState<Array<Book>>([]);
-
+    const [message, setMessage] = useState<string>("");
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [name, setName] = useState()
+    const [category, setCategory] = useState()
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await axios("/api/v1/books")
-            console.log(response.data);
+            const response = await axios("api/books", { params: { name, category } })
             setBooks(response.data)
+            console.log(books)
         }
         fetchBooks();
-    },[])
+    }, [name, category])
+
+    console.log(name)
+
+    const handleDelete = async (id: number): Promise<void> => {
+        try {
+            const response = await axios.delete(`api/books/${id}`);
+            setMessage(response.data);
+            setBooks(prevBooks => prevBooks.filter(book => book.id !== id));
+            setShowToast(true);
+            setTimeout(() => setShowToast(false), 2000);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <>
 
-            <nav className="flex pt-5 pb-10" aria-label="Breadcrumb">
-                <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                    <li className="inline-flex items-center">
-                        <Link to="/"
-                           className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                            <svg aria-hidden="true" className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                            </svg>
-                            Home
-                        </Link>
-                    </li>
-                    <li aria-current="page">
-                        <div className="flex items-center">
-                            <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor"
-                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd"
-                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                      clipRule="evenodd"></path>
-                            </svg>
-                            <span
-                                className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Books</span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
+            <Breadcrumb />
+            <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Search for books..." className="border border-gray-400 rounded p-2 mr-4 mb-4 focus:outline-none focus:border-blue-500" />
+            <input type="text" onChange={(e) => setCategory(e.target.value)} placeholder="Search for books..." className="border border-gray-400 rounded p-2 mr-4 mb-4 focus:outline-none focus:border-blue-500" />
 
-            {
-                books.map(book => <h3>{book.name}</h3>)
-            }
+            <table className="table-auto border-collapse" style={{ width: "100%" }}>
+                <thead>
+                    <tr>
+                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Isbn</th>
+                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Title</th>
+                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Author</th>
+                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Categories</th>
+                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+
+                {
+                    books.map(book => (
+
+                        <tbody>
+                            
+                            <Link to=''>
+                            <tr key={book.isbn}>
+                                <td className="border px-4 py-2">{book.isbn}</td>
+                                <td className="border px-4 py-2">{book.title}</td>
+                                <td className="border px-4 py-2">{book.author}</td>
+                                <td className="border px-4 py-2">
+                                    {book.categories.map(category =>
+                                        <div key={category.name} className="bg-gray-200 inline-block rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category.name}</div>
+                                    )}
+                                </td>
+                                <td className="border px-4 py-2">
+                                    <Link to={`/books/edit/${book.id}`} className="mr-2">Edit</Link>
+                                    <button onClick={() => handleDelete(book.id)}>Delete</button>
+                                </td>
+                            </tr>
+                            </Link>
+
+                        </tbody>))
+                }
+            </table>
+            {books.length < 1 &&
+                <div className="text-grey-700 p-4 text-center w-full">
+                    No book found
+                </div>}
+
+            {showToast && <div id="toast-bottom-right" className="fixed flex items-center w-full max-w-xs p-8 space-x-4 text-white bg-rose-300 divide-x divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
+                <div className="ml-3 text-md font-normal">{message}</div>
+            </div>}
+
+
         </>
+
     )
 }

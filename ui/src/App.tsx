@@ -5,7 +5,7 @@ import './App.css'
 import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import {BooksPage} from "./pages/BooksPage";
-import {CreateBookPage} from "./pages/CreateBookPage";
+import CreateBookPage from "./pages/CreateBookPage";
 import {Layout} from "./layout/Layout";
 
 
@@ -18,7 +18,7 @@ function App() {
             parent route elements. See the note about <Outlet> below. */}
           <Routes>
               <Route path="/" element={<Layout />}>
-                  <Route index element={<BooksPage />} />
+                  <Route path="books"  element={<BooksPage />} />
                   <Route path="create" element={<CreateBookPage />} />
 
 
