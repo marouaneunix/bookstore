@@ -37,9 +37,7 @@ function displayTable(props :props){
                         <th scope="col" className="px-6 py-3">
                             auteur
                         </th>
-                        <th scope="col" className="px-6 py-3">
-                            Description
-                        </th>
+                       
                         <th scope="col" className="px-6 py-3">
                             Categorie
                         </th>
@@ -52,7 +50,7 @@ function displayTable(props :props){
 
                 <tbody>
                     
-                    {props.books.map( (book,index )=> <Row index={index} book={book} hundleClickDelete={props.hundleClickDelete}/> )}
+                    {props.books.map( (book,index )=> <Row index={index} book={book} handleClickDelete={props.hundleClickDelete}/> )}
                   
                     
                 </tbody>

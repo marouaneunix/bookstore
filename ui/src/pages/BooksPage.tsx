@@ -29,17 +29,41 @@ export const BooksPage = () => {
             fetchBooks();
         }
 
-      const hundleSearch = async (title : string , categorie : string) =>{
+        const handleSearch = async (title?: string, category?: string) => {
+            let titleResponse, categoryResponse;
+            if (title && category) {
+              [titleResponse, categoryResponse] = await Promise.all([
+                axios.get(`/api/v1/books/title/${title}`),
+                axios.get(`/api/v1/books/categorie/${category}`),
+              ]);
+            } else if (title) {
+              titleResponse = await axios.get(`/api/v1/books/title/${title}`);
+            } else if (category) {
+              categoryResponse = await axios.get(`/api/v1/books/categorie/${category}`);
+            } else {
+              return;
+            }
+            
+            const mergedBooks = [
+              ...(titleResponse?.data ?? []),
+              ...(categoryResponse?.data ?? []),
+            ];
+            const uniqueBooksArray = mergedBooks.filter(
+                (book, index, self) =>
+                  index === self.findIndex((t) => t.id === book.id && t.title === book.title)
+              );
+              const uniqueBooksSet = new Set(uniqueBooksArray);
+              setBooks(Array.from(uniqueBooksSet));
+          };
+          
 
-        const response1 = await axios.get(`/api/v1/books/title/${title}`)
+       
 
-        const mySet1 = new Set();
-        console.log(response1.data);
-        setBooks(response1.data);
-        
-        }
+          
+          
+          
 
-        useEffect(() => {
+    useEffect(() => {
         
             fetchBooks();
         },[])
@@ -78,7 +102,7 @@ export const BooksPage = () => {
                 </ol>
             </nav>
 
-            <Search hundleSearch={hundleSearch}  />
+            <Search hundleSearch={handleSearch}  />
 
             <Table books={books} hundleClickDelete={hundleClickDelete}/>
         </>
