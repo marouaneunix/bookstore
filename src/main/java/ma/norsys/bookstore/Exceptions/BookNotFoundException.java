@@ -1,4 +1,4 @@
-package com.example.tprest.Exceptions;
+package ma.norsys.bookstore.Exceptions;
 
 public class BookNotFoundException extends RuntimeException{
     public BookNotFoundException(String message) {

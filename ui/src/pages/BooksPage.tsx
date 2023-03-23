@@ -1,24 +1,51 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link} from "react-router-dom";
+import Table from "./Table"
+import Search from "./Search";
 
 type Book = {
     id: number;
-    name: string;
+    description: string;
+    isbn: string;
+    categories: string;
+    title: string;
+    auteur:string
 }
 export const BooksPage = () => {
 
     const [books, setBooks] = useState<Array<Book>>([]);
 
+    const fetchBooks = async () => {
+        const response = await axios("/api/v1/books")
+        console.log(response.data);
+        setBooks(response.data)
+    }
+    
 
-    useEffect(() => {
-        const fetchBooks = async () => {
-            const response = await axios("/api/v1/books")
-            console.log(response.data);
-            setBooks(response.data)
+    const hundleClickDelete = async (id : any) =>{
+
+            const response = await axios.delete(`/api/v1/books/${id}`)
+            fetchBooks();
         }
-        fetchBooks();
-    },[])
+
+      const hundleSearch = async (title : string , categorie : string) =>{
+
+        const response1 = await axios.get(`/api/v1/books/title/${title}`)
+
+        const mySet1 = new Set();
+        console.log(response1.data);
+        setBooks(response1.data);
+        
+        }
+
+        useEffect(() => {
+        
+            fetchBooks();
+        },[])
+
+
+    
 
     return (
         <>
@@ -51,9 +78,9 @@ export const BooksPage = () => {
                 </ol>
             </nav>
 
-            {
-                books.map(book => <h3>{book.name}</h3>)
-            }
+            <Search hundleSearch={hundleSearch}  />
+
+            <Table books={books} hundleClickDelete={hundleClickDelete}/>
         </>
     )
 }

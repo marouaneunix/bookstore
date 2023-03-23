@@ -1,16 +1,16 @@
+
 import {Link} from "react-router-dom";
-import React from "react";
-import FormCreateBook from "./FormCreateBook";
+import Table from "./Table"
 
+function SearchPage(props : any){
+  
 
-export const CreateBookPage = () => {
-    return (
-        <>
-            <nav className="flex" aria-label="Breadcrumb">
+    <>
+    <nav className="flex pt-5 pb-10" aria-label="Breadcrumb">
                 <ol className="inline-flex items-center space-x-1 md:space-x-3">
                     <li className="inline-flex items-center">
                         <Link to="/"
-                              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                           className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
                             <svg aria-hidden="true" className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -28,16 +28,19 @@ export const CreateBookPage = () => {
                                       clipRule="evenodd"></path>
                             </svg>
                             <span
-                                className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Create books</span>
+                                className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Books</span>
                         </div>
                     </li>
                 </ol>
             </nav>
 
-            <FormCreateBook/>
+            <Table books={props.books} hundleClickDelete={props.hundleClickDelete}/>
+    
+    </>
 
 
 
-        </>
-    )
+
 }
+
+export default SearchPage;
