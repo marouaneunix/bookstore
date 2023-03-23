@@ -34,6 +34,9 @@ public class BooksService {
         if (book.getCategories() == null || book.getCategories().isEmpty()) {
             throw new InvalidRequestException("Book should have at least on category");
         }
+        if (book.getDescription().length() < 10) {
+            throw new InvalidRequestException("Short description");
+        }
 
         if (booksRepository.findByIsbn(book.getIsbn()).isPresent()) {
             throw new InvalidRequestException("Book with " + book.getIsbn() + " already exists");
@@ -85,21 +88,23 @@ public class BooksService {
         return optionalBook.get();
     }
 
-    public List<Book> search(String keyword) {
-        List<Book> books = booksRepository.findByTitleContainingIgnoreCase(keyword);
-        books.addAll(booksRepository.findByCategoriesNameContainingIgnoreCase(keyword));
-        books.addAll(booksRepository.findByAuthorContainingIgnoreCase(keyword));
-        books.addAll(booksRepository.findByIsbnContainingIgnoreCase(keyword));
+    public List<Book> search(String name, String category) {
+        List<Book> books = booksRepository.findByTitleContainingIgnoreCase(name);
+        books.addAll(booksRepository.findByCategoriesNameContainingIgnoreCase(category));
 
         Set<Book> uniqueBooks = new HashSet<>(books);
         return new ArrayList<>(uniqueBooks);
     }
 
-    public Boolean delete(Long id) throws BookNotFoundException {
+    public String delete(Long id) throws BookNotFoundException {
         Book existingBook = getById(id);
+        try {
+            booksRepository.delete(existingBook);
+            return "Book deleted successfully";
 
-        booksRepository.delete(existingBook);
-        return true;
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 }

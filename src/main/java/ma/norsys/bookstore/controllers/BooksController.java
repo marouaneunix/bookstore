@@ -1,6 +1,5 @@
 package ma.norsys.bookstore.controllers;
 
-
 import jakarta.annotation.Nullable;
 import ma.norsys.bookstore.exceptions.BookNotFoundException;
 import ma.norsys.bookstore.exceptions.InvalidRequestException;
@@ -13,25 +12,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
-@RequestMapping("books")
+@RequestMapping("api/books")
 public class BooksController {
     @Autowired
     private BooksService booksService;
 
     @GetMapping
-    public ResponseEntity<List<Book>> getAll(@Nullable String keyword) {
+    public ResponseEntity<List<Book>> getAll(@Nullable String name, @Nullable String category) {
         List<Book> books;
-        if (keyword == null || keyword.isBlank()) {
+        if ((name == null || name.isBlank()) && (category == null || category.isBlank())) {
             books = booksService.getAll();
+        } else if (name == null || name.isBlank()) {
+            books = booksService.search(null, category.trim());
+        } else if (category == null || category.isBlank()) {
+            books = booksService.search(name.trim(), null);
         } else {
-            System.out.println(keyword);
-            books = booksService.search(keyword.trim());
+            books = booksService.search(name.trim(), null);
         }
         return ResponseEntity.ok().body(books);
     }
-
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Book book) throws InvalidRequestException {
@@ -46,7 +46,8 @@ public class BooksController {
     }
 
     @PutMapping("/{bookId}")
-    public ResponseEntity<?> update(@PathVariable Long bookId, @RequestBody Book book) throws BookNotFoundException, InvalidRequestException {
+    public ResponseEntity<?> update(@PathVariable Long bookId, @RequestBody Book book)
+            throws BookNotFoundException, InvalidRequestException {
         Book existingBook = booksService.getById(bookId);
         existingBook.setIsbn(book.getIsbn());
         existingBook.setTitle(book.getTitle());
@@ -55,10 +56,9 @@ public class BooksController {
         return ResponseEntity.ok().body(savedBook);
     }
 
-
     @DeleteMapping("/{bookId}")
     public ResponseEntity<?> delete(@PathVariable Long bookId) throws BookNotFoundException {
-        Boolean res = booksService.delete(bookId);
+        String res = booksService.delete(bookId);
         return ResponseEntity.ok().body(res);
     }
 
