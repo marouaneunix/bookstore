@@ -5,6 +5,7 @@ import ma.norsys.bookstore.Services.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -29,6 +30,19 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBookById(@PathVariable Long id){
         bookService.deleteBookById(id);
+    }
+
+
+    @GetMapping("/search/name/{name}")
+    public List<Book> searchBookByName(@PathVariable String name){
+         return bookService.searchByName(name);
+    }
+
+    @GetMapping("/search/categories/{categories}")
+
+    public HashSet<Book> searchBookByCategory(@PathVariable String categories){
+
+        return bookService.searchByCategory(categories);
     }
 
 

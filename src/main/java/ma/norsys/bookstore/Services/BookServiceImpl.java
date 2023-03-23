@@ -4,6 +4,8 @@ import ma.norsys.bookstore.Entities.Book;
 import ma.norsys.bookstore.Repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -15,6 +17,7 @@ public class BookServiceImpl implements BookServiceInterface{
 
     @Override
     public Book saveBook(Book book) {
+
         return bookRepository.save(book);
     }
 
@@ -31,5 +34,41 @@ public class BookServiceImpl implements BookServiceInterface{
     @Override
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
+    }
+
+    @Override
+    public List<Book> searchByName(String name) {
+        return bookRepository.getBookByName(name);
+    }
+
+    @Override
+    public HashSet<Book> searchByCategory(String categories) {
+        HashSet<Book> bookFound =new HashSet<>();
+        List<Book> allBook=bookRepository.findAll();
+        String[] categoriesSearchSplit=categories.split(" ");
+
+       for(int i=0;i< categoriesSearchSplit.length;i++){
+           for(int j=0; j<allBook.size();j++){
+
+               String[] bookCategorySplit=allBook.get(j).getCategory().split(" ");
+
+
+               for(int k=0;k<bookCategorySplit.length;k++){
+
+
+                   if(bookCategorySplit[k].compareTo(categoriesSearchSplit[i])==0){
+
+
+
+                       bookFound.add(allBook.get(j));
+                   }
+
+
+
+               }
+
+           }
+       }
+       return bookFound;
     }
 }

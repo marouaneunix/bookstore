@@ -2,7 +2,7 @@ package ma.norsys.bookstore.Services;
 
 import ma.norsys.bookstore.Entities.Book;
 
-import java.util.List;
+import java.util.*;
 
 public interface BookServiceInterface {
 
@@ -13,8 +13,11 @@ public interface BookServiceInterface {
 
     Book getBookById(Long id);
 
-
     List<Book> getAllBooks();
+
+    List<Book> searchByName(String name);
+
+    HashSet <Book> searchByCategory(String categories);
 
 
 }
