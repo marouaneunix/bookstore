@@ -27,7 +27,7 @@ public class BooksController {
         } else if (category == null || category.isBlank()) {
             books = booksService.search(name.trim(), null);
         } else {
-            books = booksService.search(name.trim(), null);
+            books = booksService.search(name.trim(), category.trim());
         }
         return ResponseEntity.ok().body(books);
     }
