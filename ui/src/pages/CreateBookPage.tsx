@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
 import axios from 'axios';
 import Breadcrumb from '../components/Breadcrumb';
 import Select from 'react-select'
@@ -10,13 +10,18 @@ type Category = {
 };
 
 type Book = {
-    id: number;
+    id?: number;
     title: string;
     isbn: string;
     author: string;
     description: string;
     categories: Category[];
 };
+
+type Option = {
+    value:string,
+    label:string,
+}
 
 const CreateBookPage = () => {
     const [author, setAuthor] = useState('');
@@ -25,27 +30,27 @@ const CreateBookPage = () => {
     const [description, setDescription] = useState('');
     const [error, setError] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
-    const [formErrors, setFormErrors] = useState({});
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const [options, setOptions] = useState([]);
+    const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
+    const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
+    const [options, setOptions] = useState<Option[]>([]);
 
     const navigate = useNavigate()
 
-
-    const handleSelectChange = (selectedOptions) => {
+    const handleSelectChange = (selectedOptions:Option[]) => {
         setSelectedOptions(selectedOptions);
-        setCategories(selectedOptions.map((option) => ({
-            name: option.label
+        setCategories(selectedOptions.map((option, index) => ({
+          id: index,
+          name: option.label
         })))
-    };
-
-    function handleNewOption(e) {
+      }
+      
+      function handleNewOption(e: SyntheticEvent) {
         e.preventDefault();
-        const newOption = e.target.value;
-        const optionObj = {value: newOption, label: newOption};
+        const newOption = (e.target as HTMLInputElement).value;
+        const optionObj = { value: newOption, label: newOption };
         setOptions([...options, optionObj]);
-        setSelectedOptions([...selectedOptions, optionObj]);
-    }
+      }
+      
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -83,7 +88,7 @@ const CreateBookPage = () => {
 
 
     const validate = (book: Book) => {
-        const errors = {};
+        const errors: { [key: string]: string } = {};
         if (!book.title) {
             errors['title'] = '*Title required!*';
         }
@@ -193,7 +198,7 @@ const CreateBookPage = () => {
                         type="text"
                         placeholder="Add a new category"
                         onKeyPress={(e) => {
-                            if (e.key === 'Enter' || e.keyCode === 32) {
+                            if (e.key === 'Enter' || e.keyCode === 13) {
                                 handleNewOption(e);
                             }
                         }}
