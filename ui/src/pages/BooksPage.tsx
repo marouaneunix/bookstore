@@ -37,7 +37,12 @@ export const BooksPage = () => {
         const nameMatch = book.name.toLowerCase().includes(searchQuery.toLowerCase());
         const categoryMatch = book.category.toLowerCase().includes(searchCategory.toLowerCase());
         return nameMatch && categoryMatch;
-    })
+    });
+
+    const deleteBookHandler = (filteredBooks) => {
+        setBooks(filteredBooks)
+    };
+
 
     return (
         <>
@@ -73,7 +78,7 @@ export const BooksPage = () => {
                     <option>War</option>
                 </select>
             </div>
-            <BooksList books={filterBooksByName} />
+            <BooksList books={filterBooksByName} onDeleteBook={deleteBookHandler} />
         </>
     )
 }

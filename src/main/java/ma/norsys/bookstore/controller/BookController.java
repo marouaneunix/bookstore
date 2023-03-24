@@ -40,4 +40,22 @@ public class BookController {
     }
 
 
+    @DeleteMapping("/{bookId}")
+    public int deleteBook(@PathVariable int bookId) {
+        Optional<Book> book = bookService.findById(bookId);
+
+        if (!book.isPresent()) {
+            throw new RuntimeException("Book with ID: " + bookId + " not found.");
+        }
+
+        bookService.deleteBookById(bookId);
+
+        return bookId;
+    }
+
+
 }
+
+
+
+
