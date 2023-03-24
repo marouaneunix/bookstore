@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb";
 
 type Category = {
@@ -29,7 +29,7 @@ export const BooksPage = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await axios("api/books", { params: { name, category } })
+            const response = await axios("api/books", {params: {name, category}})
             setBooks(response.data)
         }
         fetchBooks();
@@ -54,45 +54,49 @@ export const BooksPage = () => {
     return (
         <>
 
-            <Breadcrumb />
-            <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Search for books..." className="border border-gray-400 rounded p-2 mr-4 mb-4 focus:outline-none focus:border-blue-500" />
-            <input type="text" onChange={(e) => setCategory(e.target.value)} placeholder="Search for books..." className="border border-gray-400 rounded p-2 mr-4 mb-4 focus:outline-none focus:border-blue-500" />
+            <Breadcrumb/>
+            <input type="text" onChange={(e) => setName(e.target.value)} placeholder="Search for books..."
+                   className="border border-gray-400 rounded p-2 mr-4 mb-4 focus:outline-none focus:border-blue-500"/>
+            <input type="text" onChange={(e) => setCategory(e.target.value)} placeholder="Search for books..."
+                   className="border border-gray-400 rounded p-2 mr-4 mb-4 focus:outline-none focus:border-blue-500"/>
 
-            <table className="table-auto border-collapse" style={{ width: "100%" }}>
+            <table className="table-auto border-collapse" style={{width: "100%"}}>
                 <thead>
-                    <tr>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Isbn</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Title</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Author</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Categories</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Actions</th>
-                    </tr>
+                <tr>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Isbn</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Title</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Author</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Categories</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Actions</th>
+                </tr>
                 </thead>
 
                 <tbody>
 
-                    {
-                        books.map(book => (
+                {
+                    books.map(book => (
 
-                            <tr key={book.isbn}>
-                                <td onClick={() => handleClick(book.id)} className="text-blue-600 visited:text-purple-600 border px-4 py-2">
+                        <tr key={book.isbn}>
+                            <td onClick={() => handleClick(book.id)}
+                                className="text-blue-600 visited:text-purple-600 border px-4 py-2">
 
-                                    {book.isbn}
+                                {book.isbn}
 
-                                </td>
-                                <td onClick={() => handleClick(book.id)} className="border px-4 py-2">{book.title}</td>
-                                <td onClick={() => handleClick(book.id)} className="border px-4 py-2">{book.author}</td>
-                                <td className="border px-4 py-2">
-                                    {book.categories.map(category =>
-                                        <div key={category.name} className="bg-gray-200 inline-block rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category.name}</div>
-                                    )}
-                                </td>
-                                <td className="border px-4 py-2">
-                                    <button onClick={() => handleDelete(book.id)}>Delete</button>
-                                </td>
-                            </tr>
-                        ))
-                    }
+                            </td>
+                            <td onClick={() => handleClick(book.id)} className="border px-4 py-2">{book.title}</td>
+                            <td onClick={() => handleClick(book.id)} className="border px-4 py-2">{book.author}</td>
+                            <td className="border px-4 py-2">
+                                {book.categories.map(category =>
+                                    <div key={category.name}
+                                         className="bg-gray-200 inline-block rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category.name}</div>
+                                )}
+                            </td>
+                            <td className="border px-4 py-2">
+                                <button onClick={() => handleDelete(book.id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))
+                }
                 </tbody>
             </table>
             {books.length < 1 &&
@@ -100,7 +104,9 @@ export const BooksPage = () => {
                     No book found
                 </div>}
 
-            {showToast && <div id="toast-bottom-right" className="fixed flex items-center w-full max-w-xs p-8 space-x-4 text-white bg-rose-300 divide-x divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
+            {showToast && <div id="toast-bottom-right"
+                               className="fixed flex items-center w-full max-w-xs p-8 space-x-4 text-white bg-rose-300 divide-x divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800"
+                               role="alert">
                 <div className="ml-3 text-md font-normal">{message}</div>
             </div>}
 

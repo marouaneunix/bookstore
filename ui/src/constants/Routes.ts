@@ -5,12 +5,12 @@ import ShowBook from "../pages/ShowBook.js";
 
 export const APP_ROUTES = [
     {
-        path:'/books' ,
-        element:BooksPage
+        path: '/books',
+        element: BooksPage
     },
     {
-        path:'/create' ,
-        element:CreateBookPage
+        path: '/create',
+        element: CreateBookPage
     },
     {
         path: '/:id',

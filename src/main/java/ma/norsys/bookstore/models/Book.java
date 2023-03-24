@@ -2,7 +2,6 @@ package ma.norsys.bookstore.models;
 
 import jakarta.persistence.*;
 
-
 import java.util.List;
 
 @Entity
@@ -24,9 +23,21 @@ public class Book {
                     CascadeType.MERGE
             })
     @JoinTable(name = "book_categories",
-            joinColumns = { @JoinColumn(name = "post_id") },
-            inverseJoinColumns = { @JoinColumn(name = "tag_id") })
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")})
     private List<Category> categories;
+
+    public Book(Long id, String isbn, String title, String author, String description, List<Category> categories) {
+        this.id = id;
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.categories = categories;
+    }
+
+    public Book() {
+    }
 
     public Long getId() {
         return id;
@@ -74,17 +85,5 @@ public class Book {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
-    }
-
-    public Book(Long id, String isbn, String title, String author, String description, List<Category> categories) {
-        this.id = id;
-        this.isbn = isbn;
-        this.title = title;
-        this.author = author;
-        this.description = description;
-        this.categories = categories;
-    }
-
-    public Book() {
     }
 }

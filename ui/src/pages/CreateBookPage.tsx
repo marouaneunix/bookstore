@@ -42,7 +42,7 @@ const CreateBookPage = () => {
     function handleNewOption(e) {
         e.preventDefault();
         const newOption = e.target.value;
-        const optionObj = { value: newOption, label: newOption };
+        const optionObj = {value: newOption, label: newOption};
         setOptions([...options, optionObj]);
         setSelectedOptions([...selectedOptions, optionObj]);
     }
@@ -59,12 +59,10 @@ const CreateBookPage = () => {
     }, [])
 
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const book: Book= {
+        const book: Book = {
             isbn,
             title,
             author,
@@ -84,7 +82,6 @@ const CreateBookPage = () => {
     };
 
 
-
     const validate = (book: Book) => {
         const errors = {};
         if (!book.title) {
@@ -102,7 +99,7 @@ const CreateBookPage = () => {
         if (book.description.length < 10) {
             errors['description'] = '*Description most have at least 10 characters!*';
         }
-        if (book.categories.length<1) {
+        if (book.categories.length < 1) {
             errors['categories'] = '*Book should have at least one category!*';
         }
 
@@ -112,7 +109,7 @@ const CreateBookPage = () => {
 
     return (
         <>
-            <Breadcrumb />
+            <Breadcrumb/>
             <form className="authForm m-auto mt-8 p-5 col-md-6 border shadow-sm rounded-3 bg-white align-middle">
                 {error ? (
                     <p className="text-red-500 text-sm font-bold">{error}</p>
@@ -123,7 +120,7 @@ const CreateBookPage = () => {
                     {formErrors['isbn'] ? (
                         <p className="text-red-500 text-sm font-bold">{formErrors['isbn']}</p>
                     ) : null}
-                    <label className="block mb-1 font-bold" >ISBN</label>
+                    <label className="block mb-1 font-bold">ISBN</label>
                     <input
                         className='mt-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                         id="isbn"
@@ -205,7 +202,8 @@ const CreateBookPage = () => {
 
                 </div>
 
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleSubmit} >
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={handleSubmit}>
                     Submit
                 </button>
             </form>

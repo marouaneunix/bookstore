@@ -1,27 +1,21 @@
 package ma.norsys.bookstore;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.transaction.Transactional;
 import ma.norsys.bookstore.models.Book;
 import ma.norsys.bookstore.repositories.BooksRepository;
-import ma.norsys.bookstore.services.BooksService;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,6 +30,13 @@ public class BooksControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     @Transactional
@@ -44,7 +45,7 @@ public class BooksControllerTest {
         List<Book> books = booksRepository.findAll();
 
         mockMvc.perform(get("/api/books")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(books)));
 
@@ -59,9 +60,9 @@ public class BooksControllerTest {
 
         List<Book> books = booksRepository.findByTitleContainingIgnoreCase(name);
         mockMvc.perform(get("/api/books")
-                .param("name", name)
-                .param("category", category)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("name", name)
+                        .param("category", category)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(books)));
 
@@ -76,9 +77,9 @@ public class BooksControllerTest {
 
         List<Book> books = booksRepository.findByCategoriesNameContainingIgnoreCase(category);
         mockMvc.perform(get("/api/books")
-                .param("name", name)
-                .param("category", category)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("name", name)
+                        .param("category", category)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(books)));
 
@@ -94,20 +95,12 @@ public class BooksControllerTest {
         List<Book> books = booksRepository.findByCategoriesNameContainingIgnoreCase(category);
 
         mockMvc.perform(get("/api/books")
-                .param("name", name)
-                .param("category", category)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("name", name)
+                        .param("category", category)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(asJsonString(books)));
 
 
-    }
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

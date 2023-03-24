@@ -6,7 +6,6 @@ import ma.norsys.bookstore.exceptions.InvalidRequestException;
 import ma.norsys.bookstore.models.Book;
 import ma.norsys.bookstore.services.BooksService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

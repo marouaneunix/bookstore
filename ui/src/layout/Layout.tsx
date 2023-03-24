@@ -1,12 +1,11 @@
 import {Link, Outlet} from "react-router-dom";
-import Breadcrumb from "../components/Breadcrumb";
 
-export const  Layout = () => {
+export const Layout = () => {
     const crumbs = [
-        { name: 'Home', path: '/' },
-        { name: 'Blog', path: '/blog' },
-        { name: 'Post 123', path: '/blog/123' },
-      ];
+        {name: 'Home', path: '/'},
+        {name: 'Blog', path: '/blog'},
+        {name: 'Post 123', path: '/blog/123'},
+    ];
     return (
         <div>
             {/* A "layout route" is a good place to put markup you want to
@@ -33,17 +32,18 @@ export const  Layout = () => {
                         <ul className="flex flex-col mt-4 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-transparent ">
                             <li>
                                 <Link to="/"
-                                   className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-gray-700 md:p-0 "
-                                   aria-current="page">Home</Link>
+                                      className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-gray-700 md:p-0 "
+                                      aria-current="page">Home</Link>
                             </li>
                             <li>
                                 <Link to="/books"
-                                   className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-gray-700 md:p-0 "
-                                   aria-current="page">Books</Link>
+                                      className="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-gray-700 md:p-0 "
+                                      aria-current="page">Books</Link>
                             </li>
                             <li>
                                 <Link to="/create"
-                                   className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ">Create Book</Link>
+                                      className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 ">Create
+                                    Book</Link>
                             </li>
 
                         </ul>
@@ -51,14 +51,14 @@ export const  Layout = () => {
                 </div>
             </nav>
 
-            <hr />
+            <hr/>
 
             {/* An <Outlet> renders whatever child route is currently active,
           so you can think about this <Outlet> as a placeholder for
           the child routes we defined above. */}
             <div className="md:container md:mx-auto">
 
-                <Outlet />
+                <Outlet/>
             </div>
             <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
         </div>
