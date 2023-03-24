@@ -1,34 +1,37 @@
-import React, {useEffect, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React from 'react'
 import './App.css'
-import axios from "axios";
-import {Route, Routes} from "react-router-dom";
-import {BooksPage} from "./pages/BooksPage";
+import { Route, Routes } from "react-router-dom";
+import { BooksPage } from "./pages/BooksPage";
 import CreateBookPage from "./pages/CreateBookPage";
-import {Layout} from "./layout/Layout";
+import { Layout } from "./layout/Layout";
+import { APP_ROUTES } from './constants/Routes';
 
 
 function App() {
 
+  const routes = APP_ROUTES
+
   return (
-      <div>
-          {/* Routes nest inside one another. Nested route paths build upon
+    <div>
+      {/* Routes nest inside one another. Nested route paths build upon
             parent route paths, and nested route elements render inside
             parent route elements. See the note about <Outlet> below. */}
-          <Routes>
-              <Route path="/" element={<Layout />}>
-                  <Route path="books"  element={<BooksPage />} />
-                  <Route path="create" element={<CreateBookPage />} />
 
+      <Routes>
 
-                  {/* Using path="*"" means "match anything", so this route
-                acts like a catch-all for URLs that we don't have explicit
-                routes for. */}
-                  <Route path="*" element={<h1>Not Found</h1>} />
-              </Route>
-          </Routes>
-      </div>
+        <Route path="/" element={<Layout />}>
+          {routes.map((route, i) => (
+            <Route
+              key={i}
+              exact={true}
+              path={`${route.path}`}
+              element={<route.element />}
+            />
+          ))}
+        </Route>
+      </Routes>
+      
+    </div>
   )
 }
 
