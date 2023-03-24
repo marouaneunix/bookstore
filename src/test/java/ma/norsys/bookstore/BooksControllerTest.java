@@ -1,8 +1,13 @@
 package ma.norsys.bookstore;
 
-import static org.mockito.Mockito.*;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.transaction.Transactional;
+import ma.norsys.bookstore.models.Book;
+import ma.norsys.bookstore.repositories.BooksRepository;
+import ma.norsys.bookstore.services.BooksService;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 
-import ma.norsys.bookstore.models.Book;
-import ma.norsys.bookstore.repositories.BooksRepository;
-import ma.norsys.bookstore.services.BooksService;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
@@ -28,44 +33,81 @@ public class BooksControllerTest {
 
     @Autowired
     BooksRepository booksRepository;
-    @MockBean
-    BooksService bookService;
     @Autowired
     private MockMvc mockMvc;
 
+
     @Test
-    public void testGetAll() throws Exception {
-        // Set up test data
+    @Transactional
+    @DisplayName("Should retrieve all books when no search params is provided")
+    public void shouldRetrieveAllBooksWhenNoSearchParamsIsProvided() throws Exception {
         List<Book> books = booksRepository.findAll();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String booksJson = objectMapper.writeValueAsString(books);
         mockMvc.perform(get("/api/books")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(booksJson));
-
-        verify(bookService, times(1)).getAll();
+                .andExpect(content().json(asJsonString(books)));
 
     }
 
     @Test
-    public void testSearch() throws Exception {
+    @Transactional
+    @DisplayName("Should retrieve books based on name when name param is provided")
+    public void shouldRetrieveBooksBasedOnNameWhenNameParamIsProvided() throws Exception {
+        String name = "Velit";
+        String category = null;
 
-        String keyword = "th";
-
-        List<Book> books = booksRepository.findByTitleContainingIgnoreCase(keyword);
-        books.addAll(booksRepository.findByCategoriesNameContainingIgnoreCase(keyword));
-        books.addAll(booksRepository.findByAuthorContainingIgnoreCase(keyword));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String booksJson = objectMapper.writeValueAsString(books);
+        List<Book> books = booksRepository.findByTitleContainingIgnoreCase(name);
         mockMvc.perform(get("/api/books")
+                .param("name", name)
+                .param("category", category)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(booksJson));
+                .andExpect(content().json(asJsonString(books)));
 
-        verify(bookService, times(1)).getAll();
+    }
 
+    @Test
+    @Transactional
+    @DisplayName("Should retrieve books based on category when category param is provided")
+    public void shouldRetrieveBooksBasedOnCategoryWhenCategoryParamIsProvided() throws Exception {
+        String name = null;
+        String category = "Sience";
+
+        List<Book> books = booksRepository.findByCategoriesNameContainingIgnoreCase(category);
+        mockMvc.perform(get("/api/books")
+                .param("name", name)
+                .param("category", category)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(asJsonString(books)));
+
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Should retrieve books based on category and name when category param is provided")
+    public void shouldRetrieveBooksBasedOnCategoryAndNameWhenCategoryParamIsProvided() throws Exception {
+        String name = null;
+        String category = "Sience";
+
+        List<Book> books = booksRepository.findByCategoriesNameContainingIgnoreCase(category);
+
+        mockMvc.perform(get("/api/books")
+                .param("name", name)
+                .param("category", category)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(asJsonString(books)));
+
+
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
