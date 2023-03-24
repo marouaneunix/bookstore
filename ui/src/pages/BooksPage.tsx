@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb";
 
 type Category = {
@@ -24,17 +24,20 @@ export const BooksPage = () => {
     const [showToast, setShowToast] = useState<boolean>(false);
     const [name, setName] = useState()
     const [category, setCategory] = useState()
+    const navigate = useNavigate()
+
 
     useEffect(() => {
         const fetchBooks = async () => {
             const response = await axios("api/books", { params: { name, category } })
             setBooks(response.data)
-            console.log(books)
         }
         fetchBooks();
     }, [name, category])
 
-    console.log(name)
+    function handleClick(id) {
+        navigate(`/${id}`);
+    }
 
     const handleDelete = async (id: number): Promise<void> => {
         try {
@@ -66,30 +69,31 @@ export const BooksPage = () => {
                     </tr>
                 </thead>
 
-                {
-                    books.map(book => (
+                <tbody>
 
-                        <tbody>
-                            
-                            <Link to=''>
+                    {
+                        books.map(book => (
+
                             <tr key={book.isbn}>
-                                <td className="border px-4 py-2">{book.isbn}</td>
-                                <td className="border px-4 py-2">{book.title}</td>
-                                <td className="border px-4 py-2">{book.author}</td>
+                                <td onClick={() => handleClick(book.id)} className="text-blue-600 visited:text-purple-600 border px-4 py-2">
+
+                                    {book.isbn}
+
+                                </td>
+                                <td onClick={() => handleClick(book.id)} className="border px-4 py-2">{book.title}</td>
+                                <td onClick={() => handleClick(book.id)} className="border px-4 py-2">{book.author}</td>
                                 <td className="border px-4 py-2">
                                     {book.categories.map(category =>
                                         <div key={category.name} className="bg-gray-200 inline-block rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category.name}</div>
                                     )}
                                 </td>
                                 <td className="border px-4 py-2">
-                                    <Link to={`/books/edit/${book.id}`} className="mr-2">Edit</Link>
                                     <button onClick={() => handleDelete(book.id)}>Delete</button>
                                 </td>
                             </tr>
-                            </Link>
-
-                        </tbody>))
-                }
+                        ))
+                    }
+                </tbody>
             </table>
             {books.length < 1 &&
                 <div className="text-grey-700 p-4 text-center w-full">
