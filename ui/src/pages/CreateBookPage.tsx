@@ -19,8 +19,8 @@ type Book = {
 };
 
 type Option = {
-    value:string,
-    label:string,
+    value: string,
+    label: string,
 }
 
 const CreateBookPage = () => {
@@ -30,27 +30,27 @@ const CreateBookPage = () => {
     const [description, setDescription] = useState('');
     const [error, setError] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
-    const [formErrors, setFormErrors] = useState<{[key: string]: string}>({});
+    const [formErrors, setFormErrors] = useState<{ [key: string]: string }>({});
     const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
     const [options, setOptions] = useState<Option[]>([]);
 
     const navigate = useNavigate()
 
-    const handleSelectChange = (selectedOptions:Option[]) => {
+    const handleSelectChange = (selectedOptions: Option[]) => {
         setSelectedOptions(selectedOptions);
         setCategories(selectedOptions.map((option, index) => ({
-          id: index,
-          name: option.label
+            id: index,
+            name: option.label
         })))
-      }
-      
-      function handleNewOption(e: SyntheticEvent) {
+    }
+
+    function handleNewOption(e: SyntheticEvent) {
         e.preventDefault();
         const newOption = (e.target as HTMLInputElement).value;
-        const optionObj = { value: newOption, label: newOption };
+        const optionObj = {value: newOption, label: newOption};
         setOptions([...options, optionObj]);
-      }
-      
+    }
+
 
     useEffect(() => {
         const fetchCategories = async () => {

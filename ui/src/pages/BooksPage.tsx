@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Breadcrumb from "../components/Breadcrumb";
 import SearchBar from "../components/SearchBar";
 
@@ -30,13 +30,13 @@ export const BooksPage = () => {
 
     useEffect(() => {
         const fetchBooks = async () => {
-            const response = await axios("api/books", { params: { name, category } })
+            const response = await axios("api/books", {params: {name, category}})
             setBooks(response.data)
         }
         fetchBooks();
     }, [name, category])
 
-    function handleClick(id:number) {
+    function handleClick(id: number) {
         navigate(`/${id}`);
     }
 
@@ -60,46 +60,46 @@ export const BooksPage = () => {
     return (
         <>
 
-            <Breadcrumb />
-            <SearchBar onSubmit={handleSearch} />
-            <table className="table-auto border-collapse" style={{ width: "100%" }}>
+            <Breadcrumb/>
+            <SearchBar onSubmit={handleSearch}/>
+            <table className="table-auto border-collapse" style={{width: "100%"}}>
                 <thead>
-                    <tr>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Isbn</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Title</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Author</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Categories</th>
-                        <th className="px-4 py-2 bg-gray-300 text-gray-600">Actions</th>
-                    </tr>
+                <tr>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Isbn</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Title</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Author</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Categories</th>
+                    <th className="px-4 py-2 bg-gray-300 text-gray-600">Actions</th>
+                </tr>
                 </thead>
 
                 <tbody>
 
-                    {
-                        books.map(book => (
+                {
+                    books.map(book => (
 
-                            <tr key={book.isbn}>
-                                <td
-                                    className="text-blue-600 visited:text-purple-600 border px-4 py-2">
+                        <tr key={book.isbn}>
+                            <td
+                                className="text-blue-600 visited:text-purple-600 border px-4 py-2">
 
-                                    {book.isbn}
+                                {book.isbn}
 
-                                </td>
-                                <td className="border px-4 py-2">{book.title}</td>
-                                <td className="border px-4 py-2">{book.author}</td>
-                                <td className="border px-4 py-2">
-                                    {book.categories.map(category =>
-                                        <div key={category.name}
-                                            className="bg-gray-200 inline-block rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category.name}</div>
-                                    )}
-                                </td>
-                                <td className="border px-4 py-2">
-                                    <button className="mr-2" onClick={() => handleDelete(book.id)}>Delete</button>
-                                    <button onClick={() => handleClick(book.id)}>Show</button>
-                                </td>
-                            </tr>
-                        ))
-                    }
+                            </td>
+                            <td className="border px-4 py-2">{book.title}</td>
+                            <td className="border px-4 py-2">{book.author}</td>
+                            <td className="border px-4 py-2">
+                                {book.categories.map(category =>
+                                    <div key={category.name}
+                                         className="bg-gray-200 inline-block rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{category.name}</div>
+                                )}
+                            </td>
+                            <td className="border px-4 py-2">
+                                <button className="mr-2" onClick={() => handleDelete(book.id)}>Delete</button>
+                                <button onClick={() => handleClick(book.id)}>Show</button>
+                            </td>
+                        </tr>
+                    ))
+                }
                 </tbody>
             </table>
             {books.length < 1 &&
@@ -108,8 +108,8 @@ export const BooksPage = () => {
                 </div>}
 
             {showToast && <div id="toast-bottom-right"
-                className="fixed flex items-center w-full max-w-xs p-8 space-x-4 text-white bg-rose-300 divide-x divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800"
-                role="alert">
+                               className="fixed flex items-center w-full max-w-xs p-8 space-x-4 text-white bg-rose-300 divide-x divide-gray-200 rounded-lg shadow right-5 bottom-5 dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800"
+                               role="alert">
                 <div className="ml-3 text-md font-normal">{message}</div>
             </div>}
 
