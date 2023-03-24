@@ -1,8 +1,29 @@
-import {Link} from "react-router-dom";
-import React from "react";
+import {Link, useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import './CreateBookPage.css'
+import axios from "axios";
 
 
 export const CreateBookPage = () => {
+    let navigate=useNavigate();
+    const [name,setName]=useState('');
+    const [author,setAuthor]=useState('');
+    const [isbn,setIsbn]=useState('');
+    const [category,setCategory]=useState('');
+    const [description,setDescription]=useState('');
+    const addBook=async (e:any)=>{
+        e.preventDefault();
+        const book={isbn,name,author,category,description}
+        console.log(book.isbn)
+        if(book.isbn!==null&&book.name!==null){
+            console.log(book.isbn)
+            await axios.post("/api/books",book)
+            console.log(book.isbn)
+            navigate("/")
+        }else{
+            alert("isbn and name are required")
+        }
+    }
     return (
         <>
             <nav className="flex" aria-label="Breadcrumb">
@@ -32,6 +53,30 @@ export const CreateBookPage = () => {
                     </li>
                 </ol>
             </nav>
+
+            <form className="book-form">
+
+                    <label htmlFor="isbn">ISBN:</label>
+                    <input type="text" id="isbn" name="isbn" placeholder="Enter book isbn" value={isbn} onChange={(event)=>
+                        setIsbn(event.target.value)
+                    } required/>
+
+                    <label htmlFor="title">Name:</label>
+                    <input type="text" id="title" name="title" placeholder="Enter book title" value={name} onChange={(event)=>setName(event.target.value)} required/>
+
+                    <label htmlFor="author">Author:</label>
+                    <input type="text" id="author" name="author" placeholder="Enter book author name" value={author} onChange={(event)=>setAuthor(event.target.value)}/>
+
+                    <label htmlFor="category">Category:</label>
+                    <input type="text" id="category" name="category" placeholder="Enter book category" value={category} onChange={(event)=>setCategory(event.target.value)}/>
+
+
+                    <label htmlFor="description">Description:</label>
+                    <textarea id="description" name="description" placeholder="Enter book description" value={description} onChange={(event)=>setDescription(event.target.value)}></textarea>
+
+                    <button type="submit" onClick={addBook}>Save Book</button>
+            </form>
+
         </>
     )
 }

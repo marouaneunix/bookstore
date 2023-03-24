@@ -19,18 +19,19 @@ public class BookstoreApplication {
 }
 
 
+/*
 @RestController
 @RequestMapping("/api/v1/books")
 class BookController {
 
 
 	@GetMapping()
-	public ResponseEntity<List<BookDTO>> getBooks() {
+	public ResponseEntity<List<Book>> getBooks() {
 		return ResponseEntity.ok(List.of(
-				new BookDTO(10L, "Effective Java"),
-				new BookDTO(10L, "Spring"),
-		new BookDTO(10L, "TDD")));
+				new Book(10L, "Effective Java"),
+				new Book(10L, "Spring"),
+		new Book(10L, "TDD")));
 	}
 }
 
-record BookDTO(Long id, String name){}
+record Book(Long id, String name){}*/

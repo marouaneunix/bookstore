@@ -1,24 +1,49 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import './BooksPage.css'
 
-type Book = {
-    id: number;
-    name: string;
+export interface Book{
+    id:number,
+    isbn:string,
+    name:string,
+    author:string,
+    category:string
 }
 export const BooksPage = () => {
 
     const [books, setBooks] = useState<Array<Book>>([]);
-
+    const [name,setName]=useState('');
+    const [categories,setCategories]=useState('');
+    const {id:number}=useParams()
 
     useEffect(() => {
-        const fetchBooks = async () => {
-            const response = await axios("/api/v1/books")
-            console.log(response.data);
-            setBooks(response.data)
-        }
         fetchBooks();
     },[])
+    const fetchBooks = async () => {
+        const response = await axios("/api/books")
+        console.log(response.data);
+        setBooks(response.data)
+    }
+   const deleteRecord=async(id:number)=>{
+        await axios.delete(`api/books/${id}`)
+            .then(()=>{alert("data has deleted")})
+       fetchBooks()
+   }
+   const getSearchedData=async(name:string,categories:string)=>{
+        const response=await axios.get(`api/books/search`,{
+            params:{
+                name:name,
+                categories:categories
+            }
+        })
+        console.log(response.data);
+        setBooks(response.data)
+   }
+   const postData=async (e:any)=>{
+        e.preventDefault();
+       getSearchedData(name,categories)
+   }
 
     return (
         <>
@@ -50,10 +75,52 @@ export const BooksPage = () => {
                     </li>
                 </ol>
             </nav>
+            <div className="search-container">
+                <input type="text" placeholder="Search by name..." value={name} onChange={(event)=>setName(event.target.value)}/>
+                <input type="text" placeholder="Search by category..." value={categories} onChange={(event)=>setCategories(event.target.value)}/>
+                <button className='button1' onClick={postData}>Search</button>
+            </div>
 
-            {
+            <div >
+                <h1 className="text-center">List Books</h1>
+                <table className="table-sub-heading-color" >
+                    <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>ISBN</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {
+                        books.map(book=><tr key={book.id}>
+                            <td>{book.author}</td>
+                            <td>{book.name}</td>
+                            <td>{book.category}</td>
+                            <td>{book.isbn}</td>
+                            <td>
+                                <button className="button button1" onClick={()=>
+                                {
+                                    deleteRecord(book.id);
+                                    console.log(book.id);
+                                }}>Delete</button>
+
+                                <button className="button button1" onClick={()=>
+                                {
+                                    deleteRecord(book.id);
+                                    console.log(book.id);
+                                }}>Description</button></td>
+                        </tr>)
+                    }
+                    </tbody>
+                </table>
+            </div>
+           {/* {
                 books.map(book => <h3>{book.name}</h3>)
-            }
+            }*/}
         </>
     )
 }

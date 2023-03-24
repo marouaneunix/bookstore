@@ -7,10 +7,17 @@ import {Route, Routes} from "react-router-dom";
 import {BooksPage} from "./pages/BooksPage";
 import {CreateBookPage} from "./pages/CreateBookPage";
 import {Layout} from "./layout/Layout";
+//import {Book, ListBooks} from "./component/ListBooks";
 
 
 function App() {
-
+    /*const book:Book={
+        id:0,
+        isbn:'',
+        name:'',
+        author:'',
+        category:''
+    }*/
   return (
       <div>
           {/* Routes nest inside one another. Nested route paths build upon
