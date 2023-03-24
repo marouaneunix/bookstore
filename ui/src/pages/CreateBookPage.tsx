@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Breadcrumb from '../components/Breadcrumb';
 import Select from 'react-select'
-import { redirect, useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 type Category = {
     id: number;
@@ -24,7 +24,7 @@ const CreateBookPage = () => {
     const [isbn, setIsbn] = useState('');
     const [description, setDescription] = useState('');
     const [error, setError] = useState('');
-    const [categories, setCategories] = useState<Category[]>();
+    const [categories, setCategories] = useState<Category[]>([]);
     const [formErrors, setFormErrors] = useState({});
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [options, setOptions] = useState([]);
@@ -102,15 +102,13 @@ const CreateBookPage = () => {
         if (book.description.length < 10) {
             errors['description'] = '*Description most have at least 10 characters!*';
         }
-        if (book.categories.length = 0) {
+        if (book.categories.length<1) {
             errors['categories'] = '*Book should have at least one category!*';
         }
-
 
         setFormErrors(errors)
         return !Object.keys(errors).length;
     };
-    console.log(formErrors)
 
     return (
         <>
