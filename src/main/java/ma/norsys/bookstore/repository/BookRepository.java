@@ -9,8 +9,10 @@ import ma.norsys.bookstore.entity.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
-    Book findBookByNameContaining(String name);
+    List<Book> findBookByNameContaining(String name);
 
     List<Book> findBookByCategory(String category);
+
+    List<Book> findBookByNameContainingAndCategoryContaining(String searchName, String searchCategory);
 
 }

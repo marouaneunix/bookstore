@@ -9,8 +9,8 @@ export const  Layout = () => {
             <nav className="p-3 border-gray-200 rounded bg-gray-50">
                 <div className="container flex flex-wrap items-center justify-between mx-auto">
                     <Link to="/" className="flex items-center">
-                        <span
-                            className="self-center text-xl font-semibold whitespace-nowrap">Book Store</span>
+                        <h2
+                            className="self-center text-xl font-semibold whitespace-nowrap">Book Store</h2>
                     </Link>
                     <button data-collapse-toggle="navbar-solid-bg" type="button"
                             className="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
