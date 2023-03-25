@@ -5,9 +5,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -56,4 +53,14 @@ public class BookServiceTest {
                 .isEqualTo("Docker");
     }
 
+    @Test
+    void should_be_able_to_delete_one_book() throws Exception {
+        Book book = new Book(1, "12-543", "Java", "ben", "info", "informatique");
+
+        bookService.deleteBook(1);
+
+        verify(bookRepository).deleteById(book.getId());
+        ;
+
+    }
 }
