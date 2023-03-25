@@ -29,7 +29,7 @@ public class Book {
     private String author;
 
     @Column(nullable = false)
-    private String year;
+    private String yearofpub;
 
     @Column(nullable = false)
     private String category;

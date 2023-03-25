@@ -6,7 +6,6 @@ import ma.norsys.bookstore.entity.Book;
 import ma.norsys.bookstore.exception.BookNotFoundException;
 import ma.norsys.bookstore.service.BookService;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @WebMvcTest(BookController.class)
-class TpRestApplicationTests {
+class BookControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,15 +45,15 @@ class TpRestApplicationTests {
     List<Book> books;
     @BeforeEach
     void setup() {
-        Book book1 = new Book(1L,"Fundamentals of Wavelets","Goswami, Jaideva","2003");
-        Book book2 = new Book(2L,"Data Smart","Foreman, John","2008");
+        Book book1 = new Book(1L,"Fundamentals of Wavelets","Goswami","samir","2003","Category","dec");
+        Book book2 = new Book(2L,"Fundamentals of Wavelets","Goswami","samir","2003","Category","dec");
         books = Arrays.asList(book1,book2);
     }
 
 
 
     @Test
-    public void testGetAllUser() throws Exception {
+    public void should_find_all_books() throws Exception {
 
         when(bookService.getAllBooks()).thenReturn(books);
 
@@ -61,66 +61,90 @@ class TpRestApplicationTests {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title").value("Fundamentals of Wavelets"))
-                .andExpect(jsonPath("$[0].author").value("Goswami, Jaideva"))
-                .andExpect(jsonPath("$[0].year").value("2003"))
-                .andExpect(jsonPath("$[1].title").value("Data Smart"))
-                .andExpect(jsonPath("$[1].author").value("Foreman, John"))
-                .andExpect(jsonPath("$[1].year").value("2008"));
+                .andExpect(jsonPath("$[0].author").value("samir"))
+                .andExpect(jsonPath("$[0].yearofpub").value("2003"))
+                .andExpect(jsonPath("$[1].title").value("Fundamentals of Wavelets"))
+                .andExpect(jsonPath("$[1].author").value("samir"))
+                .andExpect(jsonPath("$[1].yearofpub").value("2003"));
 
-        verify(bookService,times(1)).getAllBooks();
+        verify(bookService).getAllBooks();
     }
 
     @Test
-    public void testGetUserById() throws Exception {
+    public void should_get_book_by_id() throws Exception {
         when(bookService.getBookById(1L)).thenReturn(books.get(0));
 
         mockMvc.perform(get("/books/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Fundamentals of Wavelets"))
-                .andExpect(jsonPath("$.author").value("Goswami, Jaideva"))
-                .andExpect(jsonPath("$.year").value("2003"));
+                .andExpect(jsonPath("$.author").value("samir"))
+                .andExpect(jsonPath("$.yearofpub").value("2003"));
+
+        verify(bookService).getBookById(1L);
     }
 
 
     @Test
-    public void testDeleteById() throws Exception{
+    public void should_delete_book_by_id() throws Exception{
         doNothing().when(bookService).deleteBookById(1L);
-        mockMvc.perform( MockMvcRequestBuilders.delete("/books/2"))
+        mockMvc.perform( MockMvcRequestBuilders.delete("/books/1"))
                 .andExpect(status().isOk());
+        verify(bookService).deleteBookById(1L);
     }
 
     @Test
-    public void testUpdateUser() throws Exception{
-        Book nouveauInfo = new Book(1L,"samir","samir","2003");
+    public void should_update_book() throws Exception{
+        Book newBook = new Book(1L,"Fundamentals of Wavelets","Goswami","samir","2003","Category","dec");
 
-        when( bookService.updateBook(nouveauInfo)).thenReturn(nouveauInfo);
-        Book utilisateurMiseAjour = bookService.updateBook(nouveauInfo);
+
+        when( bookService.updateBook(newBook)).thenReturn(newBook);
 
         mockMvc.perform(put("/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(nouveauInfo)))
+                        .content(new ObjectMapper().writeValueAsString(newBook)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.title").value("samir"))
+                .andExpect(jsonPath("$.title").value("Fundamentals of Wavelets"))
                 .andExpect(jsonPath("$.author").value("samir"));
 
-        Assertions.assertEquals(utilisateurMiseAjour,nouveauInfo);
-
+        verify(bookService).updateBook(newBook);
 
     }
 
+
     @Test
-    public void testAddUser() throws Exception{
-        Book nouveauInfo = new Book(4L,"samir","samir","samir@gmail.com");
-        when(bookService.addBook(nouveauInfo)).thenReturn(nouveauInfo);
+    public void should_add_book() throws Exception{
+        Book newBook = new Book(4L,"Fundamentals of Wavelets","Goswami","samir","2003","Category","dec");
+
+        when(bookService.addBook(newBook)).thenReturn(newBook);
         mockMvc.perform(post("/books/")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(nouveauInfo)))
+                        .content(new ObjectMapper().writeValueAsString(newBook)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.title").value("samir"))
+                .andExpect(jsonPath("$.title").value("Fundamentals of Wavelets"))
                 .andExpect(jsonPath("$.author").value("samir"));
+
+        verify(bookService).addBook(newBook);
+    }
+
+    @Test
+    public void should_search_book_by_category_and_name() throws Exception{
+        List<Book> bookList=new ArrayList<>();
+        Book newBook = new Book(4L,"Fundamentals of Wavelets","Goswami","samir","2003","Horror","dec");
+        bookList.add(newBook);
+        when(bookService.findBooksByTitleAndCategory("fundamentals","Horror")).thenReturn(bookList);
+        mockMvc.perform(get("/books/search?name=fundamentals&categories=Horror")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").value("Fundamentals of Wavelets"))
+                .andExpect(jsonPath("$[0].author").value("samir"))
+                .andExpect(jsonPath("$[0].yearofpub").value("2003"));
+
+
+        verify(bookService).findBooksByTitleAndCategory("fundamentals","Horror");
+
     }
 
     @Test
@@ -131,6 +155,7 @@ class TpRestApplicationTests {
         mockMvc.perform(get("/books/" + id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
+        verify(bookService).getBookById(id);
     }
     @Test
     public void givenNonexistentUserId_whenGetByIt_thenThrowsUserNotFoundException() throws Exception {
@@ -142,7 +167,7 @@ class TpRestApplicationTests {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage").value("Book with id: "+ id +" not found"));
 
-        verify(bookService, times(1)).getBookById(id);
+        verify(bookService).getBookById(id);
     }
 
 }

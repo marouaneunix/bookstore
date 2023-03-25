@@ -7,15 +7,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BookServiceImpl implements BookService {
 
+    private BookRepository bookRepository;
+
+
     @Autowired
-    BookRepository bookRepository;
+    public BookServiceImpl(BookRepository employeeRepository) {
+        super();
+        this.bookRepository = employeeRepository;}
 
     @Override
     public Book addBook(Book book) {
+        Objects.requireNonNull(book, "Book should not be null");
+        Objects.requireNonNull(book.getTitle(), "Book name should not be null");
+        Objects.requireNonNull(book.getIsbn(), "Book isbn should not be null");
         return bookRepository.save(book);
     }
 
@@ -38,4 +47,20 @@ public class BookServiceImpl implements BookService {
     public void deleteBookById(long id) {
         bookRepository.deleteById(id);
     }
+
+    @Override
+    public List<Book> findBooksBySearchTerm(String search) {
+        return bookRepository.findBooksByTitleContainsIgnoreCase(search);
+    }
+
+    @Override
+    public List<Book> findBooksByTitleAndCategory(String title, String category) {
+        return bookRepository.findBooksByTitleContainsIgnoreCaseAndCategoryContainsIgnoreCase(title,category);
+    }
+
+    @Override
+    public List<Book> findBooksByCategory(String category) {
+        return bookRepository.findBooksByCategoryContainsIgnoreCase(category);
+    }
+
 }
