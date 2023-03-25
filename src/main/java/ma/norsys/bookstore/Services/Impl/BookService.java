@@ -2,21 +2,21 @@ package ma.norsys.bookstore.Services.Impl;
 
 import ma.norsys.bookstore.Exceptions.BookNotFoundException;
 import ma.norsys.bookstore.Models.Book;
-import ma.norsys.bookstore.Repos.BookRepo;
+import ma.norsys.bookstore.Repository.BookRepository;
 import ma.norsys.bookstore.Services.InterfaceServiceBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookService implements InterfaceServiceBook {
 
 
     @Autowired
-    private BookRepo bookRepo;
+    private BookRepository bookRepo;
 
     @Override
     public Book addBook(Book book) {
@@ -67,6 +67,62 @@ public class BookService implements InterfaceServiceBook {
 
 
 
+
+
+    }
+
+//    public List<Book> getAllBookByTitleAndCategory(String title, String category) {
+//        List<Book> foundsBook = new ArrayList<>();
+//        if (title != null && !title.isEmpty() && category != null && !category.isEmpty()) {
+//            foundsBook = bookRepo.findBookByTitleStartsWithAndCategory(title, category);
+//        } else if (title == null || title.isEmpty()) {
+//            foundsBook = bookRepo.getAllBookByCategoryContaining(category);
+//        } else if (category == null || category.isEmpty()) {
+//            foundsBook = bookRepo.findBookByTitleStartsWith(title);
+//        } else {
+//            foundsBook = bookRepo.findAll();
+//        }
+//        return foundsBook;
+//    }
+
+
+
+
+
+
+
+    public List<Book> getAllBookByTitleAndCategory(String title, String categorie) {
+
+        List<Book> foundBook=new ArrayList<>();
+        boolean test = false;
+        if(title != null && categorie!=null) {
+            List<Book> list = bookRepo.findBookByTitleStartsWith(title);
+            for (Book a : list) {
+                String[] categoriesSearchSplit = categorie.split(" ");
+                for(String i : categoriesSearchSplit){
+                    String[] categoriesBook = a.getCategories().split(" ");
+                    for(String j : categoriesBook){
+                        if( i.equals(j) ) {
+                            test = true;
+                            break;
+                        }else test = false;
+                    }
+
+                }
+                if(test == true) foundBook.add(a);
+            }
+        }
+        else if ((title == null || title.isEmpty() )  && (categorie != null  && !categorie.isEmpty())) {
+                foundBook = bookRepo.getAllBookByCategoryContaining(categorie);
+            }
+        else if((categorie == null || categorie.isEmpty()) && (title != null  && !title.isEmpty())){
+            foundBook=bookRepo.findBookByTitleStartsWith(title);
+        }
+        else{
+            foundBook=bookRepo.findAll();
+        }
+
+        return foundBook;
 
 
     }

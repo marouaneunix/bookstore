@@ -1,8 +1,4 @@
-import React, {useEffect, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import {BooksPage} from "./pages/BooksPage";
 import {CreateBookPage} from "./pages/CreateBookPage";
@@ -20,6 +16,7 @@ function App() {
               <Route path="/" element={<Layout />}>
                   <Route index element={<BooksPage />} />
                   <Route path="create" element={<CreateBookPage />} />
+                  <Route path="books" element={<BooksPage />} />
 
 
                   {/* Using path="*"" means "match anything", so this route

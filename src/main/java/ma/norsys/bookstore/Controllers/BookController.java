@@ -5,6 +5,7 @@ import ma.norsys.bookstore.Exceptions.BookNotFoundException;
 import ma.norsys.bookstore.Models.Book;
 import ma.norsys.bookstore.Services.Impl.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,14 @@ class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable long id) throws BookNotFoundException {
         bookService.deleteBook(id);
+    }
+
+    @GetMapping("/search")
+    public List<Book> getAllBookByTitleAndCategory(@RequestParam(required = false) String title , @RequestParam(required = false) String categorie ){
+        return bookService.getAllBookByTitleAndCategory(title,categorie);
+
+
+
     }
 
 

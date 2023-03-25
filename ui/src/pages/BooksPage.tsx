@@ -27,35 +27,31 @@ export const BooksPage = () => {
 
             const response = await axios.delete(`/api/v1/books/${id}`)
             fetchBooks();
-        }
+    }
+    const handleSearch = async (title?: string, category?: string) =>{
 
-        const handleSearch = async (title?: string, category?: string) => {
-            let titleResponse, categoryResponse;
-            if (title && category) {
-              [titleResponse, categoryResponse] = await Promise.all([
-                axios.get(`/api/v1/books/title/${title}`),
-                axios.get(`/api/v1/books/categorie/${category}`),
-              ]);
-            } else if (title) {
-              titleResponse = await axios.get(`/api/v1/books/title/${title}`);
-            } else if (category) {
-              categoryResponse = await axios.get(`/api/v1/books/categorie/${category}`);
-            } else {
-              return;
+            if(title && category){
+                const response= await axios.get(`/api/v1/books/search?title=${title}&categorie=${category}`);
+                setBooks(response.data);
+            }
+            else if(title){
+                const response= await axios.get(`/api/v1/books/search?title=${title}`);
+                setBooks(response.data);
+            }
+            else if(category){
+                const response= await axios.get(`/api/v1/books/search?categorie=${category}`);
+                setBooks(response.data);
+            }else {
+               fetchBooks();
             }
             
-            const mergedBooks = [
-              ...(titleResponse?.data ?? []),
-              ...(categoryResponse?.data ?? []),
-            ];
-            const uniqueBooksArray = mergedBooks.filter(
-                (book, index, self) =>
-                  index === self.findIndex((t) => t.id === book.id && t.title === book.title)
-              );
-              const uniqueBooksSet = new Set(uniqueBooksArray);
-              setBooks(Array.from(uniqueBooksSet));
-          };
-          
+
+
+
+
+    }
+
+        
 
        
 
