@@ -16,10 +16,23 @@ export const CreateBookPage = () => {
     const saveBook = async (e:any) => {
         e.preventDefault();
         const book = {isbn,name,author,category,description}
+        if(book.isbn==""){
+            alert("isbn are required")
+            return false;
+        }
+        if(book.name==""){
+            alert("name are required")
+            return false;
+        }
+        if (book.category == "") {
+            alert("Book should have a category");
+            return false;
+        }
         if(book.isbn!==null){
             await axios.post("/api/books",book)
             navigate("/")
-        }   
+        }
+        
     }
     return (
         <>
