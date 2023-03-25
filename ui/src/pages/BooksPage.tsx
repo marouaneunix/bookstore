@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import Popup from "reactjs-popup";
 import 'reactjs-popup/dist/index.css'
 import { NavComponent } from "./NavComponent";
@@ -14,7 +14,7 @@ type Book = {
     description: string
 }
 export const BooksPage = () => {
-
+    let navigate = useNavigate();
     const [books, setBooks] = useState<Array<Book>>([]);
     const {id} = useParams()
     const [name,setName] = useState('')
@@ -45,12 +45,11 @@ export const BooksPage = () => {
     const postData = async (e:any)=>{
         e.preventDefault();
         handleSearch(name,category);
-
     }
+ 
     return (
         <>
            <NavComponent/>
-
             <form >   
                 <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                 <div className="relative">
