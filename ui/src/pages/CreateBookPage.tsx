@@ -1,37 +1,127 @@
+import axios from "axios";
+import React, { useState } from "react";
 import {Link} from "react-router-dom";
-import React from "react";
+import { Fragment } from "react";
+import {
+  Button,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+} from "@material-tailwind/react";
+import { NavBar } from "../components/NavBar";
+
+
+
+type Book={
+    id: number,
+    isbn: string,
+    title: string,
+    author: string,
+    categories: string,
+    description: string,
+  }
 
 
 export const CreateBookPage = () => {
+
+    const defaultBook: Book = {
+        id: 0,
+        isbn: '',
+        title: '',
+        author: '',
+        categories: '',
+        description: '',
+      };
+
+    const [book, setBook] = useState<Book>(defaultBook);
+
+
+      const onAddBook = async(event: React.FormEvent<HTMLFormElement>)=>{
+        event.preventDefault();
+        await axios.post("/books",book)
+        window.location.href=`/`
+      }
+
+      
+      
     return (
         <>
-            <nav className="flex" aria-label="Breadcrumb">
-                <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                    <li className="inline-flex items-center">
-                        <Link to="/"
-                              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                            <svg aria-hidden="true" className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                            </svg>
-                            Home
-                        </Link>
-                    </li>
-                    <li aria-current="page">
-                        <div className="flex items-center">
-                            <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor"
-                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd"
-                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                      clipRule="evenodd"></path>
-                            </svg>
-                            <span
-                                className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Create books</span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
+        <NavBar pageName="create Book"/>
+        
+        <h1 className="text-center text-2xl font-semibold mt-10">Add New  Book</h1>
+
+        <form   className="max-w-xl m-auto py-10 mt-10 px-12 border"
+                    onSubmit={onAddBook}>
+            <div className="mb-2">
+                <label htmlFor="Isbn" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Isbn</label>
+                <input type="text" id="isbn"
+                      className="border-solid border-gray-300 border py-2 px-4 w-full rounded text-gray-700"
+                      placeholder="Isbn" value={book.isbn}
+                      onChange={(event) =>
+                        setBook({ ...book, isbn: event.target.value })
+                      }
+                      required/>
+            </div>
+            <div className="mb-2">
+                <label htmlFor="title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Title</label>
+                <input type="text" id="title"
+                      className="border-solid border-gray-300 border py-2 px-4 w-full rounded text-gray-700"
+                      placeholder="title" value={book.title}
+                      onChange={(event) =>
+                        setBook({ ...book, title: event.target.value })
+                      }
+                      required/>
+            </div>
+            <div className="mb-2">
+                <label htmlFor="author"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Author</label>
+                <input type="text" id="author" 
+                    className="border-solid border-gray-300 border py-2 px-4 w-full rounded text-gray-700"
+                      value={book.author}
+                      onChange={(event) =>
+                        setBook({ ...book, author: event.target.value })
+                      }
+                      required/>
+            </div>
+            <div className="mb-2">
+                <label htmlFor="categories"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Categories</label>
+                <input type="text" id="categories"
+                      className="border-solid border-gray-300 border py-2 px-4 w-full rounded text-gray-700"
+                      value={book.categories}
+                      onChange={(event) =>
+                        setBook({ ...book, categories: event.target.value })
+                      }
+                      required/>
+            </div>
+            <div className="mb-2">
+                <label htmlFor="description"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Description</label>
+                <textarea id="description" placeholder="Write a description (at least 100 caracteres)..."
+                      className="border-solid border-gray-300 border py-2 px-4 w-full rounded text-gray-700"
+                      value={book.description}
+                      onChange={(event) =>{
+                        setBook({ ...book, description: event.target.value })}
+                      }
+                      required/>
+            </div>
+            <button type="submit" 
+                  className="mt-4 w-full bg-green-400 hover:bg-green-600 text-green-100 border py-3 px-6 font-semibold text-md rounded">
+                Add Book 
+            </button>
+    </form>
+
+
+ 
         </>
-    )
+    )  
 }
+
+
+
