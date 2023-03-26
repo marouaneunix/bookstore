@@ -6,6 +6,7 @@ import axios from "axios";
 import {Route, Routes} from "react-router-dom";
 import {BooksPage} from "./pages/BooksPage";
 import {CreateBookPage} from "./pages/CreateBookPage";
+import {Forms} from "./pages/withAllSearch";
 import {Layout} from "./layout/Layout";
 
 
@@ -20,7 +21,7 @@ function App() {
               <Route path="/" element={<Layout />}>
                   <Route index element={<BooksPage />} />
                   <Route path="create" element={<CreateBookPage />} />
-
+                  <Route path='forms' element={<Forms/>}/>
 
                   {/* Using path="*"" means "match anything", so this route
                 acts like a catch-all for URLs that we don't have explicit
