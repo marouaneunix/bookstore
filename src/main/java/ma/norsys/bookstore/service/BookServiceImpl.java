@@ -12,13 +12,14 @@ import java.util.Objects;
 @Service
 public class BookServiceImpl implements BookService {
 
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
 
     @Autowired
     public BookServiceImpl(BookRepository employeeRepository) {
         super();
-        this.bookRepository = employeeRepository;}
+        this.bookRepository = employeeRepository;
+    }
 
     @Override
     public Book addBook(Book book) {

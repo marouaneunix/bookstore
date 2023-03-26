@@ -1,8 +1,7 @@
-package ma.norsys.bookstore;
+package ma.norsys.bookstore.unit;
 
 import ma.norsys.bookstore.entity.Book;
 import ma.norsys.bookstore.repository.BookRepository;
-import ma.norsys.bookstore.service.BookService;
 import ma.norsys.bookstore.service.BookServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +24,7 @@ public class BookServiceTest {
     private BookRepository bookRepository;
 
     @InjectMocks
-    private BookService bookService = new BookServiceImpl(bookRepository);
+    private BookServiceImpl bookService;
 
 
     @Test

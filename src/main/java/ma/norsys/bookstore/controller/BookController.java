@@ -4,7 +4,6 @@ package ma.norsys.bookstore.controller;
 import ma.norsys.bookstore.entity.Book;
 import ma.norsys.bookstore.exception.BookNotFoundException;
 import ma.norsys.bookstore.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,10 @@ import java.util.*;
 @RequestMapping("books/")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+    public BookController(BookService bookService){
+        this.bookService=bookService;
+    }
 
     @GetMapping()
     public ResponseEntity<List<Book>> getAllUsers() {

@@ -1,4 +1,4 @@
-package ma.norsys.bookstore;
+package ma.norsys.bookstore.unit;
 
 import ma.norsys.bookstore.entity.Book;
 import ma.norsys.bookstore.repository.BookRepository;

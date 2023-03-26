@@ -1,4 +1,4 @@
-package ma.norsys.bookstore;
+package ma.norsys.bookstore.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ma.norsys.bookstore.controller.BookController;
