@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {Link, useParams} from "react-router-dom";
 import './BooksPage.css'
+import Popup from "reactjs-popup";
+import 'reactjs-popup/dist/index.css';
 
 export interface Book{
     id:number,
@@ -9,6 +11,7 @@ export interface Book{
     name:string,
     author:string,
     category:string
+    description:string
 }
 export const BooksPage = () => {
 
@@ -26,8 +29,13 @@ export const BooksPage = () => {
         setBooks(response.data)
     }
    const deleteRecord=async(id:number)=>{
-        await axios.delete(`api/books/${id}`)
-            .then(()=>{alert("data has deleted")})
+        let result=confirm("want to delete?")
+       if(result)
+       {
+           await axios.delete(`api/books/${id}`)
+               .then(()=>{alert("data has deleted")})
+       }
+
        fetchBooks()
    }
    const getSearchedData=async(name:string,categories:string)=>{
@@ -102,25 +110,26 @@ export const BooksPage = () => {
                             <td>{book.category}</td>
                             <td>{book.isbn}</td>
                             <td>
-                                <button className="button button1" onClick={()=>
+                                <button className="button button2" onClick={()=>
                                 {
                                     deleteRecord(book.id);
                                     console.log(book.id);
                                 }}>Delete</button>
 
-                                <button className="button button1" onClick={()=>
-                                {
-                                    deleteRecord(book.id);
-                                    console.log(book.id);
-                                }}>Description</button></td>
+                                <div>
+                                    <Popup trigger=
+                                               { <button className="button button1" >Description</button>}
+                                           modal nested position="right center">
+                                        <h2>Description:</h2>
+                                        <div>{book.description}</div>
+                                    </Popup>
+                                </div>
+                            </td>
                         </tr>)
                     }
                     </tbody>
                 </table>
             </div>
-           {/* {
-                books.map(book => <h3>{book.name}</h3>)
-            }*/}
         </>
     )
 }

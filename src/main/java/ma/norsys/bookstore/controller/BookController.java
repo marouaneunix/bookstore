@@ -3,6 +3,7 @@ package ma.norsys.bookstore.controller;
 import ma.norsys.bookstore.entity.Book;
 import ma.norsys.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -27,6 +28,7 @@ public class BookController {
         return bookService.getBook(id);
     }
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Book addBook(@RequestBody Book book)
     {
         return bookService.createBook(book);

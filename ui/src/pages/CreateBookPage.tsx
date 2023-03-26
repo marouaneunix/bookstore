@@ -15,13 +15,16 @@ export const CreateBookPage = () => {
         e.preventDefault();
         const book={isbn,name,author,category,description}
         console.log(book.isbn)
-        if(book.isbn!==null&&book.name!==null){
+        if(book.isbn=="" || book.name=="")
+        {
+            alert("isbn and name are required")
+            //return false;
+        }
+        else{
             console.log(book.isbn)
             await axios.post("/api/books",book)
             console.log(book.isbn)
             navigate("/")
-        }else{
-            alert("isbn and name are required")
         }
     }
     return (
