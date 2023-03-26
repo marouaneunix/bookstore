@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class BookServiceImpl implements BookServiceInterface{
@@ -17,7 +17,11 @@ public class BookServiceImpl implements BookServiceInterface{
 
     @Override
     public Book saveBook(Book book) {
-
+        Objects.requireNonNull(book, "Book should not be null");
+        Objects.requireNonNull(book.getName(), "Book name should not be null");
+        Objects.requireNonNull(book.getIsbn(), "Book isbn should not be null");
+        Objects.requireNonNull(book.getAuthor(), "Book Author should not be null");
+        Objects.requireNonNull(book.getDescription(), "Book Description should not be null");
         return bookRepository.save(book);
     }
 
@@ -41,6 +45,26 @@ public class BookServiceImpl implements BookServiceInterface{
         return bookRepository.getBookByName(name);
     }
 
+
+//    public List<Book> searchByName1(String name) {
+//
+//        return bookRepository.findBookByNameContainingIgnoreCase(name);
+//    }
+
+
+//    public List<Book> searchByCategory1(String category) {
+//        return bookRepository.findBookByCategoryContainingIgnoreCase(category);
+//    }
+
+//    public List<Book> searchByNameByCategory1(String name,String category)
+//    {
+//        return bookRepository.findBookByNameContainingIgnoreCaseAndCategoryContainingIgnoreCase(name,category);
+//    }
+//    @Override
+//    public List<Book> findBookByNameContainingIgnoreCase(String name){
+//
+//        return bookRepository.findBookByNameContainingIgnoreCase(name);
+//    }
     @Override
     public HashSet<Book> searchByCategory(String categories) {
         HashSet<Book> bookFound =new HashSet<>();
@@ -49,9 +73,7 @@ public class BookServiceImpl implements BookServiceInterface{
 
        for(int i=0;i< categoriesSearchSplit.length;i++){
            for(int j=0; j<allBook.size();j++){
-                  //  if(allBook.get(j).getCategory().contains(categoriesSearchSplit[i])){
-                    //    bookFound.add(allBook.get(j));
-                   // }
+
                String[] bookCategorySplit=allBook.get(j).getCategory().split(" ");
 
 

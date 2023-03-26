@@ -16,6 +16,7 @@ export const BooksPage = () => {
 
     const [books, setBooks] = useState([]);
     const [showPopup, setShowPopup] = useState(false);
+ 
 
     const handleClosePopUp=()=>{
         setShowPopup(false)
@@ -51,6 +52,8 @@ export const BooksPage = () => {
     }
     const [name,setName]=useState()
     const [description,setDescription]=useState()
+    const [nameSeaech, setNameSeaech] = useState("");
+    const [categorySearch, setCategorySearch] = useState("");
 
 
     const handleShowPopUp =(name,description)=>{
@@ -63,33 +66,36 @@ export const BooksPage = () => {
 
 const handleSearchName =(nameSeaech:any)=>{
 
+    setNameSeaech(nameSeaech)
 
-console.log(nameSeaech)
+    console.log(nameSeaech)
 
-if(nameSeaech==""){
-    const fetchBooks = async () => {
-        const response = await axios("http://localhost:8090/books")
-        console.log(response.data);
-        setBooks(response.data)
+    if(nameSeaech=="" ){
+        const fetchBooks = async () => {
+            const response = await axios("http://localhost:8090/books")
+            console.log(response.data);
+            setBooks(response.data)
+        }
+        fetchBooks();
+
     }
-    fetchBooks();
+        else {
+        const fetchBooks = async () => {
+            const response = await axios(`http://localhost:8090/books/search/name/${nameSeaech}`)
+            console.log(response.data);
+            setBooks(response.data)
+        } 
+        fetchBooks();}
 
-}
-else{
-const fetchBooks = async () => {
-    const response = await axios(`http://localhost:8090/books/search/name/${nameSeaech}`)
-    console.log(response.data);
-    setBooks(response.data)
-} 
-fetchBooks();}
 
 
 }
 const handleSearchCategory =(categorySearch:any)=>{
 
+    setCategorySearch(categorySearch)
     console.log(categorySearch)
 
-    if(categorySearch==""){
+    if(categorySearch=="" ){
         const fetchBooks = async () => {
             const response = await axios("http://localhost:8090/books")
             console.log(response.data);
@@ -98,7 +104,7 @@ const handleSearchCategory =(categorySearch:any)=>{
         fetchBooks();
     
     }
-    else{
+    else {
     const fetchBooks = async () => {
         const response = await axios(`http://localhost:8090/books/search/categories/${categorySearch}`)
         console.log(response.data);

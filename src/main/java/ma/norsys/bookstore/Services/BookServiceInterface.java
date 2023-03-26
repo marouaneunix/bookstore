@@ -17,6 +17,10 @@ public interface BookServiceInterface {
 
     List<Book> searchByName(String name);
 
+    //List<Book> findBookByNameContainingIgnoreCase(String name);
+
+
+
     HashSet <Book> searchByCategory(String categories);
 
 
