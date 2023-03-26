@@ -3,6 +3,9 @@ package ma.norsys.bookstore.book;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Primary;
 
+import java.util.List;
+import java.util.Set;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -13,9 +16,15 @@ public class Book {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(name = "")
-
     private String name;
+
+    @ElementCollection
+    @CollectionTable(
+            name="category",
+            joinColumns=@JoinColumn(name="book_id")
+    )
+    @Column(name="category_name")
+    private List<String> categories;
 
     public Book(Long id, String name) {
         this.id = id;
@@ -25,8 +34,9 @@ public class Book {
     public Book() {
     }
 
-    public Book(String name) {
+    public Book(String name, List<String> categories) {
         this.name = name;
+        this.categories = categories;
     }
 
     public Long getId() {
@@ -43,5 +53,13 @@ public class Book {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }

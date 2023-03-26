@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,15 +24,23 @@ public class BookRepositoryTest {
     @ValueSource(strings = {"Java", "java", "JAVA"})
     public void should_find_search_by_criteria(String name) {
 
-        List<Book> savedBooks = of(new Book("Effective Java"), new Book("Java 17"), new Book("Spring Boot"));
+
+        List<Book> savedBooks = of(aBook("Effective Java", of("Tech")), aBook("Java 17", of()), aBook("Spring Boot", of("Tech")));
         bookRepository.saveAll(savedBooks);
 
-        List<Book> books = bookRepository.searchByCriteria(name);
+        List<Book> books = bookRepository.searchByCriteria(name, List.of("Tech", "Front"));
 
-        assertThat(books).hasSize(2);
+        assertThat(books).hasSize(1);
         assertThat(books)
                 .extracting("name")
-                .containsAll(of("Effective Java", "Java 17"));
+                .containsAll(of("Effective Java"));
 
+    }
+
+    Book aBook(String name, List<String> categories) {
+        Book book = new Book();
+        book.setName(name);
+        book.setCategories(categories);
+        return book;
     }
 }

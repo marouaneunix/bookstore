@@ -10,6 +10,8 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
+
+
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -22,5 +24,17 @@ public class BookService {
         Objects.requireNonNull(book, "Book should not be null");
         Objects.requireNonNull(book.getName(), "Book name should not be null");
         this.bookRepository.save(book);
+    }
+
+    public List<Book> searchByNameAndCategories(String name, List<String> categories) {
+        return this.bookRepository.searchByCriteria(name, categories);
+    }
+
+    public List<Book> searchByName(String name) {
+        return this.bookRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Book> searchByCategories(List<String> categories) {
+        return this.bookRepository.findByCategoriesIn(categories);
     }
 }
