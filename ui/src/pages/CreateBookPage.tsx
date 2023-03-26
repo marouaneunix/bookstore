@@ -1,37 +1,119 @@
-import {Link} from "react-router-dom";
-import React from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
+class Book {
+  name: string;
+  author: string;
+  categories: string;
+  description: string;
+  isbn: string;
+
+  constructor(name: string, author: string, categories: string, description: string,isbn: string) {
+      this.name = name;
+      this.author = author;
+      this.categories = categories;
+      this.description = description;
+      this.isbn=isbn
+  }
+}
 
 export const CreateBookPage = () => {
+
+    var name: string;
+    var description: string;
+    var categories: string;
+    var author: string;
+    var isbn: string;
+
+    const create = () => {
+        if (name && description && categories && author && isbn) {
+            let book = new Book(name, author, categories, description,isbn);
+            alert(book.name+book.author+book.categories+book.description+book.isbn)
+            axios.post('/api/books', book)
+                .then(() => {
+                    toast.success('Success Notification!', {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000,
+                    });
+                })
+                .catch((error) => {
+                    toast.error(`Error: ${error.message}`, {
+                        position: toast.POSITION.TOP_RIGHT,
+                        autoClose: 3000,
+                    });
+                });
+        } 
+        else {
+            toast.warning("missong fields", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 3000,
+            });
+        }
+    }
+
+    const getTitle = (event:any) => {
+        name = event.target.value;
+    }
+
+    const getDescription = (event:any) => {
+        description = event.target.value;
+    }
+
+    const getAuthor = (event:any) => {
+        author = event.target.value;
+    }
+
+    const getCategories = (event:any) => {
+        categories = event.target.value;
+    }
+    const getIsbn = (event:any) => {
+      isbn = event.target.value;
+    }
+
     return (
         <>
-            <nav className="flex" aria-label="Breadcrumb">
-                <ol className="inline-flex items-center space-x-1 md:space-x-3">
-                    <li className="inline-flex items-center">
-                        <Link to="/"
-                              className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
-                            <svg aria-hidden="true" className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                            </svg>
-                            Home
-                        </Link>
-                    </li>
-                    <li aria-current="page">
-                        <div className="flex items-center">
-                            <svg aria-hidden="true" className="w-6 h-6 text-gray-400" fill="currentColor"
-                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd"
-                                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                      clipRule="evenodd"></path>
-                            </svg>
-                            <span
-                                className="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Create books</span>
-                        </div>
-                    </li>
-                </ol>
-            </nav>
+            
+            <ToastContainer />
+            <div className="flex flex-row p-2 rounded shadow-md items-center">
+                <div className="basis-1/4  mx-2">
+                    <div>
+                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                        <input type="text" onChange={(e) => getTitle(e)} id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="title" required />
+                    </div>
+                </div>
+                <div className="basis-1/4 mx-2">
+                    <div>
+                        <label htmlFor="author" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Author</label>
+                        <input type="text" onChange={(e) => getAuthor(e)} id="author" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="author" required />
+                    </div>
+                </div>
+                <div className="basis-1/4  mx-2 ">
+                    <div>
+                        <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                        <input type="text" onChange={(e) => getDescription(e)} id="description" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="description" required />
+                    </div>
+                </div>
+                <div className="basis-1/4  mx-2 ">
+                    <div>
+                        <label htmlFor="categories" className="block text-sm font-medium text-gray-900 dark:text-white">Categories</label>
+                        <input type="text" onChange={(e) => getCategories(e)} id="categories" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="categories (category1, category2,...." required />
+                    </div>
+                </div>
+                <div className="basis-1/4  mx-2 ">
+                    <div>
+                        <label htmlFor="isbn" className="block text-sm font-medium text-gray-900 dark:text-white">Isbn</label>
+                        <input type="text" onChange={(e) => getIsbn(e)} id="isbn" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="isbn" required />
+                    </div>
+                </div>
+
+                <div className="basis-1/4 mx-2">
+                    <div>
+                        <label htmlFor="action" className="block text-sm font-medium text-gray-900 dark:text-white">Action</label>
+                        <button type="button" onClick={() => create()} className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Save</button>
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

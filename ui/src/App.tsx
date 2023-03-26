@@ -7,6 +7,7 @@ import {Route, Routes} from "react-router-dom";
 import {BooksPage} from "./pages/BooksPage";
 import {CreateBookPage} from "./pages/CreateBookPage";
 import {Layout} from "./layout/Layout";
+import { ViewDescription } from './pages/ViewDescription';
 
 
 function App() {
@@ -17,10 +18,10 @@ function App() {
             parent route paths, and nested route elements render inside
             parent route elements. See the note about <Outlet> below. */}
           <Routes>
-              <Route path="/" element={<Layout />}>
-                  <Route index element={<BooksPage />} />
+                  <Route path="/" element={<Layout />}>
+                  <Route index element={<BooksPage  />} />
                   <Route path="create" element={<CreateBookPage />} />
-
+                  <Route path="/description" element={<ViewDescription/>}/>
 
                   {/* Using path="*"" means "match anything", so this route
                 acts like a catch-all for URLs that we don't have explicit

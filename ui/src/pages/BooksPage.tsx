@@ -1,28 +1,50 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import { SearchPage } from "./SearchPage";
 
 type Book = {
     id: number;
     name: string;
+    author:string;
+    categories:string;
+    isbn:string;
+    description:string;
 }
+
 export const BooksPage = () => {
-
+    
     const [books, setBooks] = useState<Array<Book>>([]);
+    const [search,setSearch]=useState("");
+    const {id}=useParams();
+    const {name}=useParams();
 
-
+    const fetchBooks = async () => {
+        const response = await axios("/api/books")
+        console.log(response.data);
+        setBooks(response.data)
+    }
     useEffect(() => {
-        const fetchBooks = async () => {
-            const response = await axios("/api/v1/books")
-            console.log(response.data);
-            setBooks(response.data)
-        }
         fetchBooks();
     },[])
+    const deleteBoookById = async (id:any) => {
+        console.log(id);
+        await axios.delete(`/api/books/${id}`)
+       fetchBooks();
+    }
+    const onSearch = async (search: any) => {
+        const response = await axios.get("/api/books/titlesAndCategories", {
+            params: {
+                name: search.name,
+                categories: search.categories
+            }
+        })
+        setBooks(response.data)
+    }
+
 
     return (
         <>
-
             <nav className="flex pt-5 pb-10" aria-label="Breadcrumb">
                 <ol className="inline-flex items-center space-x-1 md:space-x-3">
                     <li className="inline-flex items-center">
@@ -50,9 +72,44 @@ export const BooksPage = () => {
                     </li>
                 </ol>
             </nav>
+    
+            <SearchPage onSearch={onSearch} />
 
             {
-                books.map(book => <h3>{book.name}</h3>)
+                
+                <div>
+                <div className="relative w-full flex flex-col shadow-lg mb-6 mt-4"></div>
+               <table className="table-auto">
+                    <thead>
+                        <tr className="border border-solid border-l-0 ">
+                            <th className="text-md px-6 py-3">ISBN</th>
+                            <th className="text-md px-6 py-3">Author</th>
+                            <th className="text-md px-6 py-3">Name</th>
+                            <th className="text-md px-6 py-3">Category</th>
+                            <th className="text-md px-6 py-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    { 
+                            books.map(book => 
+
+                        <tr key={book.id}>
+                           
+                            <td className="text-md px-6 py-3"><a href="/description" className="row-link">{book.isbn}</a></td>
+                            <td className="text-md px-6 py-3"><a href="/description" className="row-link">{book.author}</a></td>
+                            <td className="text-md px-6 py-3"><a href="/description"className="row-link">{book.name}</a></td>
+                            <td className="text-md px-6 py-3"><a href="/description" className="row-link">{book.categories}</a></td>
+                            <td className="text-md px-6 py-3"> 
+                             
+                            <button 
+                            onClick={()=>deleteBoookById(book.id)}
+                            className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900" > Remove </button> </td>
+                        </tr>
+                        )
+                    }
+                    </tbody>
+                </table>
+                </div>
             }
         </>
     )
