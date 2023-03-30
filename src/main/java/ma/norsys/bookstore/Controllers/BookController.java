@@ -34,27 +34,6 @@ public class BookController {
         bookService.deleteBookById(id);
     }
 
-
-    @GetMapping("/search/name/{name}")
-    public List<Book> searchBookByName(@PathVariable String name){
-         return bookService.searchByName(name);
-    }
-
-    @GetMapping("/search/categories/{categories}")
-
-    public HashSet<Book> searchBookByCategory(@PathVariable String categories){
-
-        return bookService.searchByCategory(categories);
-    }
-
-    @GetMapping("/searchh")
-
-    public List<Book> findBookByNameContainingIgnoreCase(@RequestParam(value = "name") String name){
-
-        return bookService.searchByName1(name);
-    }
-
-
         @PutMapping()
         public Book updateBook( @RequestBody Book book){
 
@@ -73,7 +52,7 @@ public class BookController {
         Set<Book> searchedBooks=new HashSet<>();
         if(name!="" && categories!="" && author!="" )
         {
-            System.out.println("koulchi machi null");
+
             searchedBooks.addAll(bookService.searchByName1(name));
             searchedBooks.addAll(bookService.searchByAuthor(author));
             for(String category: categories.split(" "))
@@ -84,7 +63,7 @@ public class BookController {
         }
         else if(name!="" && author!=""){
 
-            System.out.println("name author");
+
             searchedBooks.addAll(bookService.searchByAuthor(author));
             searchedBooks.addAll(bookService.searchByName1(name));
             return searchedBooks;
@@ -92,7 +71,7 @@ public class BookController {
 
         else if(author!="" && categories!=""){
 
-            System.out.println("categori author");
+
             searchedBooks.addAll(bookService.searchByAuthor(author));
             for(String category: categories.split(" "))
             {
@@ -103,7 +82,7 @@ public class BookController {
 
         else if(categories!="" && name!="")
         {
-            System.out.println("categori name");
+
             searchedBooks.addAll(bookService.searchByName1(name));
             for(String category: categories.split(" "))
             {
@@ -128,7 +107,7 @@ public class BookController {
         }
         else if (categories=="" && name=="" && author==""){
 
-            System.out.println("koulchi null");
+
              searchedBooks.addAll(bookService.getAllBooks());
             return searchedBooks;
         }

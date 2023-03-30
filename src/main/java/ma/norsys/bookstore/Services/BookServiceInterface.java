@@ -15,12 +15,12 @@ public interface BookServiceInterface {
 
     List<Book> getAllBooks();
 
-    List<Book> searchByName(String name);
+
 
     Book updateBook(Book book);
 
 
-    HashSet <Book> searchByCategory(String categories);
+
 
 
 }
