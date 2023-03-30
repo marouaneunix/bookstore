@@ -51,11 +51,17 @@ public class BookController {
     }
 
 
+    @PutMapping
+    public void updateBook(@RequestBody Book book)  {
+         bookService.updateBook(book);
+    }
+
     @GetMapping("/filter")
     public Set<Book> getBooksByTitleOrCategories(@RequestParam(name = "title") String title,
-                                                 @RequestParam(name = "categories") String categories) {
+                                                 @RequestParam(name = "categories") String categories,
+                                                 @RequestParam(name = "author") String author ) {
 
-        return bookService.getByTitleOrCategoriesOrBoth(title, categories);
+        return bookService.getByTitleOrCategoriesOrBoth(title, categories, author);
     }
 
 

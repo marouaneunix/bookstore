@@ -46,7 +46,7 @@ public class BookServiceImp implements IBookService {
     }
 
     @Override
-    public Set<Book> getByTitleOrCategoriesOrBoth(String title, String categories) {
+    public Set<Book> getByTitleOrCategoriesOrBoth(String title, String categories, String author) {
         Set<Book> matchingBooks = new HashSet<>();
         List<String> cats = List.of(categories.split(" "));
 
@@ -54,6 +54,14 @@ public class BookServiceImp implements IBookService {
         boolean b2 = categories == null || categories.isEmpty() || categories.isBlank();
         List<Book> books = bookRepository.findAll();
 
+        if(author !=""){
+            books.forEach(book -> {
+                if (book.getAuthor().toUpperCase().contains(author.toUpperCase())) {
+                    matchingBooks.add(book);
+                }
+            });
+            return matchingBooks;
+        }else{
         if (b1 && b2) return new HashSet<>(books);
         if (b1) {
             for (String cat : cats) {
@@ -83,6 +91,11 @@ public class BookServiceImp implements IBookService {
         }
         if (matchingBooks.isEmpty()) throw new BookNotFoundException("No books with given categories or title");
         return matchingBooks;
+    }}
+
+    @Override
+    public void updateBook(Book book) {
+        bookRepository.save(book);
     }
 }
 

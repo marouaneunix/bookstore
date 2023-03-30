@@ -116,9 +116,6 @@ export const CreateBookPage = () => {
                 Add Book 
             </button>
     </form>
-
-
- 
         </>
     )  
 }

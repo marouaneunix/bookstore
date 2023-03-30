@@ -17,5 +17,6 @@ public interface IBookService {
 
     boolean deleteBook(int id);
 
-    Set<Book> getByTitleOrCategoriesOrBoth(String title, String categories);
+    void updateBook(Book book);
+    Set<Book> getByTitleOrCategoriesOrBoth(String title, String categories, String author);
 }
