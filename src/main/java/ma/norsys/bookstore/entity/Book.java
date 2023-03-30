@@ -22,7 +22,7 @@ public class Book {
     private String title;
 
     @Column(nullable = false)
-    private String Isbn;
+    private String isbn;
 
 
     @Column(nullable = false)

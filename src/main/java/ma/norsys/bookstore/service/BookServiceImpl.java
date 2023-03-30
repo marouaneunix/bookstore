@@ -25,6 +25,7 @@ public class BookServiceImpl implements BookService {
     public Book addBook(Book book) {
         Objects.requireNonNull(book, "Book should not be null");
         Objects.requireNonNull(book.getTitle(), "Book name should not be null");
+        System.out.print(book.getTitle());
         Objects.requireNonNull(book.getIsbn(), "Book isbn should not be null");
         return bookRepository.save(book);
     }
@@ -62,6 +63,21 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findBooksByCategory(String category) {
         return bookRepository.findBooksByCategoryContainsIgnoreCase(category);
+    }
+
+    @Override
+    public List<Book> findBooksByAuthor(String author) {
+        return bookRepository.findBooksByAuthorContainingIgnoreCase(author);
+    }
+
+    @Override
+    public List<Book> searchByTitleAndAuthor(String title, String author) {
+        return bookRepository.findBooksByTitleContainsIgnoreCaseAndAndAuthorContainingIgnoreCase(title,author);
+    }
+
+    @Override
+    public List<Book> searchByAuthorAndCategory(String author, String category) {
+        return bookRepository.findBooksByAuthorContainingIgnoreCaseAndAndCategoryContainingIgnoreCase(author,category);
     }
 
 }

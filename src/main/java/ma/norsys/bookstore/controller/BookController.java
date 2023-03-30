@@ -11,6 +11,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("books/")
+@CrossOrigin("*")
 public class BookController {
 
     private final BookService bookService;
@@ -38,14 +39,24 @@ public class BookController {
         }
     }
 
-    @GetMapping("search/{search}")
-    public ResponseEntity<List<Book>> getBooksBySearchTerm(@PathVariable String search) {
-        List<Book> books = bookService.findBooksBySearchTerm(search);
+    @GetMapping("searchbytitle")
+    public ResponseEntity<List<Book>> getBooksBySearchTerm(@RequestParam(value = "title", required = false) String title) {
+        List<Book> books = bookService.findBooksBySearchTerm(title);
         return ResponseEntity.ok(books);
     }
-    @GetMapping("/search")
-    public ResponseEntity<List<Book>> getUserByIdAndName(@RequestParam(value = "name", required = false) String name,
-                                                         @RequestParam(value = "categories", required = false) String category
+    @GetMapping("searchbyCategory")
+    public ResponseEntity<List<Book>> getBooksByCategory(@RequestParam(value = "category", required = false) String category) {
+        List<Book> books = bookService.findBooksByCategory(category);
+        return ResponseEntity.ok(books);
+    }
+    @GetMapping("searchbyAuthor")
+    public ResponseEntity<List<Book>> getBooksByAuthor(@RequestParam(value = "author", required = false) String author) {
+        List<Book> books = bookService.findBooksByAuthor(author);
+        return ResponseEntity.ok(books);
+    }
+    @GetMapping("/search/title/category")
+    public ResponseEntity<List<Book>> getBooksByTitleAndCategory(@RequestParam(value = "title", required = false) String name,
+                                                         @RequestParam(value = "category", required = false) String category
     )
     {
         Set<Book> searchedBooks = new HashSet<>();
@@ -75,6 +86,7 @@ public class BookController {
 
     @PostMapping
     public Book addUser(@RequestBody Book book){
+        System.out.print(book.getTitle());
         return bookService.addBook(book);
     }
 
@@ -82,6 +94,30 @@ public class BookController {
     public Book UpdateUser(@RequestBody Book book){
         return bookService.updateBook(book);
     }
+    @GetMapping("searchbyCatAndTilte")
+    public ResponseEntity<List<Book>> searchBooksByTitleAndCategory(@RequestParam(value = "title", required = false) String name,
+                                                                 @RequestParam(value = "category", required = false) String category
+    ){
+        List<Book> books = bookService.findBooksByTitleAndCategory(name,category);
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("searchByTitleAndAuthor")
+    public ResponseEntity<List<Book>> searchBooksByTitleAndAuthor(@RequestParam(value = "title", required = false) String name,
+                                                                    @RequestParam(value = "author", required = false) String author
+    ){
+        List<Book> books = bookService.searchByTitleAndAuthor(name,author);
+        return ResponseEntity.ok(books);
+    }
+
+    @GetMapping("searchByAuthorAndCategory")
+    public ResponseEntity<List<Book>> searchBooksByAuthorAndCategory(@RequestParam(value = "author", required = false) String author,
+                                                                  @RequestParam(value = "category", required = false) String category
+    ){
+        List<Book> books = bookService.searchByAuthorAndCategory(author,category);
+        return ResponseEntity.ok(books);
+    }
+
 
 
 }
