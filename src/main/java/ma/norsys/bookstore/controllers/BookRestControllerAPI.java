@@ -8,6 +8,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("books")
+@CrossOrigin("*")
 public class BookRestControllerAPI {
     private final BookService bookService;
 
@@ -43,16 +44,16 @@ public class BookRestControllerAPI {
             @RequestParam(value="categories", required=false) String category) {
         Set<Book> searchedBooks = new HashSet<>();
 
-        if (!name.equals("") && !category.equals("")) {
+        if (name!="" && category!="" && category != null && name!=null) {
             // search by both name and category
             for (String cat : category.split(",")) {
                 searchedBooks.addAll(bookService.getBooksByNameAndCategory(name, cat));
             }
             return searchedBooks;
-        } else if (!name.equals("")) {
+        } else if (name!="" && name!=null) {
             // search by name only
             return bookService.getBooksByNameContain(name);
-        } else if (!category.equals("")) {
+        } else if (category!="" && category!=null) {
             // search by category only
             for (String cat : category.split(",")) {
                 searchedBooks.addAll(bookService.getBooksByCategoriesContain(cat));
@@ -63,6 +64,13 @@ public class BookRestControllerAPI {
             return new HashSet<>(bookService.getAllBooks());
         }
     }
+    @GetMapping("/searchByAuthor")
+    public Set<Book> searchBooksByAuthor(
+            @RequestParam(value="author", required=false) String author){
+        return bookService.getBooksByAuthorContain(author);
+    }
+
+
 
     @ExceptionHandler(BookNotFoundException.class)
     public ResponseEntity<?> BookNotFound(BookNotFoundException ex){

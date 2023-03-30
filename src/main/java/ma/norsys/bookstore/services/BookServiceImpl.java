@@ -62,6 +62,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Set<Book> getBooksByAuthorContain(String searchTerm) {
+        return bookRepository.findBooksByAuthorIgnoreCaseContaining(searchTerm);
+    }
+
+    @Override
     public Set<Book> getBooksByCategoriesContain(String searchTerm) {
         return bookRepository.findByCategorieIgnoreCaseContaining(searchTerm);
     }

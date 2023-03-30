@@ -15,4 +15,5 @@ public interface BookService {
     public Set<Book> getBooksByCategoriesContain(String searchTerm);
     public Set<Book> getBooksByNameContain(String searchTerm);
     public Set<Book> getBooksByNameAndCategory(String searchTerm,String catSearchTerm);
+    public Set<Book> getBooksByAuthorContain(String searchTerm);
 }
