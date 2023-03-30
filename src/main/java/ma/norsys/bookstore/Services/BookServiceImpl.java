@@ -45,16 +45,28 @@ public class BookServiceImpl implements BookServiceInterface{
         return bookRepository.getBookByName(name);
     }
 
+    @Override
+    public Book updateBook(Book book) {
+        return bookRepository.save(book);
+    }
 
-//    public List<Book> searchByName1(String name) {
-//
-//        return bookRepository.findBookByNameContainingIgnoreCase(name);
-//    }
+
+    public List<Book> searchByName1(String name) {
+
+        return bookRepository.findBooksByNameContainsIgnoreCase(name);
+   }
 
 
-//    public List<Book> searchByCategory1(String category) {
-//        return bookRepository.findBookByCategoryContainingIgnoreCase(category);
-//    }
+   public List<Book> searchByCategory1(String category) {
+        return bookRepository.findBooksByCategoryContainsIgnoreCase(category);
+   }
+
+
+    public List<Book> searchByAuthor(String author) {
+        return bookRepository.findBooksByAuthorContainsIgnoreCase(author);
+    }
+
+
 
 //    public List<Book> searchByNameByCategory1(String name,String category)
 //    {

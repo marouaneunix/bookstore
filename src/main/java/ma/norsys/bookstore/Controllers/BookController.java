@@ -47,46 +47,93 @@ public class BookController {
         return bookService.searchByCategory(categories);
     }
 
-//    @GetMapping("/searchh")
-//
-//    public List<Book> findBookByNameContainingIgnoreCase(@RequestParam(value = "name") String name){
-//
-//        return bookService.findBookByNameContainingIgnoreCase(name);
-//    }
+    @GetMapping("/searchh")
+
+    public List<Book> findBookByNameContainingIgnoreCase(@RequestParam(value = "name") String name){
+
+        return bookService.searchByName1(name);
+    }
 
 
+        @PutMapping()
+        public Book updateBook( @RequestBody Book book){
+
+            return bookService.updateBook(book);
+        }
 
     @PostMapping()
     public Book addBook( @RequestBody Book book){
 
          return bookService.saveBook(book);
     }
-//
-//    @GetMapping("/search")
-//    public Set<Book> searchBook(@RequestParam(value = "name") String name, @RequestParam(value = "categories") String categories)
-//    {
-//        Set<Book> searchedBooks=new HashSet<>();
-//        if(name!=null && categories!=null)
-//        {
-//            for(String category: categories.split(" "))
-//            {
-//                searchedBooks.addAll(bookService.searchByNameByCategory1(name,category));
-//            }
-//            return searchedBooks;
-//        }
-//        else if(name!=null){
-//            searchedBooks.addAll(bookService.searchByName(name));
-//            return searchedBooks;
-//        }
-//        else if(categories!=null)
-//        {
-//            for(String category: categories.split(","))
-//            {
-//                searchedBooks.addAll(bookService.searchByCategory(category));
-//            }
-//            return searchedBooks;
-//        }
-//        return Collections.EMPTY_SET;
-//    }
+
+    @GetMapping("/search")
+    public Set<Book> searchBook(@RequestParam(value = "name") String name,@RequestParam(value = "author") String author, @RequestParam(value = "categories") String categories)
+    {
+        Set<Book> searchedBooks=new HashSet<>();
+        if(name!="" && categories!="" && author!="" )
+        {
+            System.out.println("koulchi machi null");
+            searchedBooks.addAll(bookService.searchByName1(name));
+            searchedBooks.addAll(bookService.searchByAuthor(author));
+            for(String category: categories.split(" "))
+            {
+                searchedBooks.addAll(bookService.searchByCategory1(category));
+            }
+            return searchedBooks;
+        }
+        else if(name!="" && author!=""){
+
+            System.out.println("name author");
+            searchedBooks.addAll(bookService.searchByAuthor(author));
+            searchedBooks.addAll(bookService.searchByName1(name));
+            return searchedBooks;
+        }
+
+        else if(author!="" && categories!=""){
+
+            System.out.println("categori author");
+            searchedBooks.addAll(bookService.searchByAuthor(author));
+            for(String category: categories.split(" "))
+            {
+                searchedBooks.addAll(bookService.searchByCategory1(category));
+            }
+            return searchedBooks;
+        }
+
+        else if(categories!="" && name!="")
+        {
+            System.out.println("categori name");
+            searchedBooks.addAll(bookService.searchByName1(name));
+            for(String category: categories.split(" "))
+            {
+                searchedBooks.addAll(bookService.searchByCategory1(category));
+            }
+            return searchedBooks;
+        }
+        else if(name!=""){
+            searchedBooks.addAll(bookService.searchByName1(name));
+            return searchedBooks;
+        }
+        else if(author!=""){
+            searchedBooks.addAll(bookService.searchByAuthor(author));
+            return searchedBooks;
+        }
+        else if(categories!=""){
+            for(String category: categories.split(" "))
+            {
+                searchedBooks.addAll(bookService.searchByCategory1(category));
+            }
+            return searchedBooks;
+        }
+        else if (categories=="" && name=="" && author==""){
+
+            System.out.println("koulchi null");
+             searchedBooks.addAll(bookService.getAllBooks());
+            return searchedBooks;
+        }
+
+        return Collections.EMPTY_SET;
+    }
 
 }

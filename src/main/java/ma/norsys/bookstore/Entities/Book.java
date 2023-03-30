@@ -25,19 +25,19 @@ public class Book {
     @Column(name = "id_book")
     private Long idBook;
 
-    @Column(length = 10, nullable = false, unique = true)
+    @Column( nullable = false, unique = true)
     private String name;
 
-    @Column(length = 100, nullable = false)
+    @Column( nullable = false)
     private String category;
 
-    @Column(length = 10, nullable = false)
+    @Column( nullable = false)
     private String author;
 
-    @Column(length = 10, nullable = false, unique = true)
+    @Column( nullable = false, unique = true)
     private String isbn;
 
-    @Column(length = 100, nullable = false)
+    @Column( nullable = false)
     private String description;
 
 }

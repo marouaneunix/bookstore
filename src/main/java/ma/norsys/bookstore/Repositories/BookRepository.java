@@ -18,6 +18,21 @@ public interface BookRepository extends JpaRepository<Book,Long> {
     List<Book> getBookByName( @Param("name") String name);
 
 
+    List <Book> findBooksByNameContainsIgnoreCase(String name);
+
+    List <Book> findBooksByAuthorContainsIgnoreCase(String author);
+
+    List <Book> findBooksByCategoryContainsIgnoreCase(String category);
+
+
+   // findBookByNameContainingIgnoreCaseAndCategoryContainingIgnoreCase
+
+    //List <Book> findBooksByNameContainsIgnoreCaseAn(String category);
+
+
+
+
+
 
 
 
