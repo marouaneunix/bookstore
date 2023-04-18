@@ -4,7 +4,6 @@ import {Route, Routes} from "react-router-dom";
 import {Layout} from "./layout/Layout";
 import {APP_ROUTES} from './constants/Routes';
 
-
 function App() {
 
     const routes = APP_ROUTES
